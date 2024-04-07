@@ -1,0 +1,21 @@
+button {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 24px;
+  gap: 10px;
+  background-color:$main-coral;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  box-sizing: border-box;
+  color:$main-white;
+}
+button:hover {
+  background-color: $light-coral;
+}
+
+button:active {
+  background-color: $active-coral;
+}
