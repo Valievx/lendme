@@ -1,0 +1,25 @@
+//  -------------- BASIC -----------------
+@mixin mp-null {
+  margin: 0;
+  padding: 0;
+}
+
+@mixin mp-null-list {
+  @include mp-null;
+  list-style-type: none;
+}
+
+// FONTS 
+@mixin use-font(
+  $font-size: 20px,
+  $line-height: 24px,
+  $font-weight: 500,
+  $font-style: normal,
+  $font-family: '"Onest", sans-serif'
+) {
+  font-size: $font-size;
+  line-height: $line-height;
+  font-weight: $font-weight;
+  font-style: $font-style;
+  font-family: $font-family;
+}

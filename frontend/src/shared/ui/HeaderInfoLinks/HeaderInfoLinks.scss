@@ -1,0 +1,14 @@
+.header__info {
+  width: 100%;
+  display: flex;
+  gap: 32px;
+  background-color: $gray;
+  @include mp-null;
+  padding: 10px 80px 6px;
+ 
+  &_link {
+    @include use-font(14px, 114%, 400);
+    cursor: pointer;
+    @include mp-null-list;
+  }
+}

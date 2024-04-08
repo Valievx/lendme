@@ -1,21 +1,23 @@
-button {
+.button {
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  padding: 10px 24px;
   gap: 10px;
-  background-color:$main-coral;
   border: none;
   border-radius: 10px;
   cursor: pointer;
   box-sizing: border-box;
-  color:$main-white;
-}
-button:hover {
-  background-color: $light-coral;
-}
+  color: $main-white;
 
-button:active {
-  background-color: $active-coral;
+  &__coral{
+    padding: 10px 24px;
+    background-color: $main-coral;
+    &:hover {
+      background-color: $light-coral;
+    }
+    &:active {
+      background-color: $active-coral;
+    }
+  }
 }

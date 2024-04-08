@@ -1,9 +1,9 @@
 import './Button.scss'
 
 export const Button = (props) => {
-  const { className, children, ...otherProps } = props;
+  const { className, children,type = "button", ...otherProps } = props;
   return (
-    <button type="button" className={className} {...otherProps}>
+    <button  className={`button ${className}`} type={type} {...otherProps}>
       {children}
     </button>
   );
