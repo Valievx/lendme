@@ -9,7 +9,7 @@
   list-style-type: none;
 }
 
-// FONTS 
+// FONTS
 @mixin use-font(
   $font-size: 20px,
   $line-height: 24px,
@@ -22,4 +22,11 @@
   font-weight: $font-weight;
   font-style: $font-style;
   font-family: $font-family;
+}
+
+// BLOCKS
+@mixin flex-column-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }

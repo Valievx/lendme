@@ -4,7 +4,8 @@
   gap: 32px;
   background-color: $gray;
   @include mp-null;
-  padding: 10px 80px 6px;
+  box-sizing: border-box;
+  padding: 10px $padding-lr 6px;
  
   &_link {
     @include use-font(14px, 114%, 400);
