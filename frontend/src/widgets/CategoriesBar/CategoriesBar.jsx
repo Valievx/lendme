@@ -1,7 +1,7 @@
 // import React from 'react';
 import './CategoriesBar.scss';
-import iconList from '../../shared/assets/icons/list-btn-icon.svg';
-import iconCity from '../../shared/assets/icons/map-city-icon.svg';
+import iconList from './icons/list-btn-icon.svg';
+import iconCity from './icons/map-city-icon.svg';
 import { Button } from '../../shared/ui/Button/Button';
 import { LinkIcons } from '../../shared/ui/Links/LinksIcons/LinkIcons';
 import { Input } from '../../shared/ui/Input/Input';
