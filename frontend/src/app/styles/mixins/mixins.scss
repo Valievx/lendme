@@ -26,7 +26,10 @@
 
 // BLOCKS
 @mixin flex-column-center {
-  display: flex;
+  @include flex-row-center;
   flex-direction: column;
+}
+@mixin flex-row-center {
+  display: flex;
   align-items: center;
 }

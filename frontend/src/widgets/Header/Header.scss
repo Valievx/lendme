@@ -9,9 +9,9 @@
     justify-content: space-between;
 
     &_box {
-      width: 60%;
-      display: flex;
-      justify-content: space-between;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      column-gap: 109px;
       align-items: center;
     }
   }
@@ -19,6 +19,7 @@
   &__login {
     display: flex;
     column-gap: 38px;
+    justify-content: end;
   }
 
   &_logo {

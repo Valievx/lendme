@@ -1,0 +1,18 @@
+.input {
+  position: relative; 
+  background: $main-white;
+  border-radius: $border-radius-s;
+  border: 1px $main-coral solid;
+  z-index: 0;
+  
+  &__search {
+    width: 100%;
+    position: relative;
+    padding: 12px 0 12px 24px;
+  }
+  
+  &-error {
+    // для теста
+    color: $active-coral;
+  }
+}

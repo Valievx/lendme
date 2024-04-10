@@ -1,6 +1,6 @@
 import './NavBar.scss'
-import { dataNavLinks } from '../../shared/lib/utils/dataNavLinks';
 import { LinkIcons } from '../../shared/ui/Links/LinksIcons/LinkIcons';
+import { dataNavLinks } from '../../shared/consts/dataNavLinks';
 
 export const NavBar = () => {
   return (
