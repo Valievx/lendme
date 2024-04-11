@@ -10,9 +10,11 @@
 }
 
 // FONTS
+// значения по умолчанию не менять!
+// там где используются данные параметры , просто надо вызвать миксин
 @mixin use-font(
-  $font-size: 20px,
-  $line-height: 24px,
+  $font-size: 24px,
+  $line-height: 28px,
   $font-weight: 500,
   $font-style: normal,
   $font-family: $font-family
@@ -22,6 +24,14 @@
   font-weight: $font-weight;
   font-style: $font-style;
   font-family: $font-family;
+}
+
+// заголовки второго уровня для блоков
+@mixin suptitle-page($font-size: 40px, $line-height: 48px) {
+  @include mp-null;
+  @include use-font($font-size, $line-height);
+  padding-bottom: 32px;
+  color: $black;
 }
 
 // BLOCKS

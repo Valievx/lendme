@@ -9,7 +9,7 @@
   color: $main-white;
 
   &__coral {
-    @include use-font(18px,24px,400);
+    @include use-font(18px, 24px, 400);
     padding: 10px 24px;
     background-color: $main-coral;
     &_categories {
@@ -23,7 +23,21 @@
       right: 0;
       top: 0;
     }
-    &:hover {
+    &_slider {
+      width: 43px;
+      height: 42px;
+      border-radius: 50%;
+      background-repeat: no-repeat;
+      background-position: center;
+      padding: 0;
+      &-left {
+        background-image: url('./icons/left-icon.svg');
+      }
+      &-right {
+        background-image: url('./icons/right-icon.svg');
+      }
+    }
+    &:disabled {
       background-color: $light-coral;
     }
     &:active {
