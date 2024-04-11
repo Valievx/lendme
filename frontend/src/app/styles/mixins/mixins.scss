@@ -15,7 +15,7 @@
   $line-height: 24px,
   $font-weight: 500,
   $font-style: normal,
-  $font-family: '"Onest", sans-serif'
+  $font-family: $font-family
 ) {
   font-size: $font-size;
   line-height: $line-height;
@@ -29,6 +29,7 @@
   @include flex-row-center;
   flex-direction: column;
 }
+
 @mixin flex-row-center {
   display: flex;
   align-items: center;

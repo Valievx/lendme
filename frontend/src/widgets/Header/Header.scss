@@ -23,7 +23,7 @@
   }
 
   &_logo {
-    @include use-font(24px, 24px, 500);
+    @include use-font(24px, 24px, 600);
     @include mp-null;
   }
 }
