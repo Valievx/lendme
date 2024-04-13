@@ -40,7 +40,9 @@
       border-radius: 50%;
       background-repeat: no-repeat;
       background-position: center;
-      padding: 0;
+      padding: 20px;
+      // выровнено чтобы визуально по центру было 
+      margin: 0 5px 20px;
       &-left {
         background-image: url('./icons/left-icon.svg');
       }
@@ -49,6 +51,7 @@
       }
     }
     &:disabled {
+      pointer-events: none;
       background-color: $light-coral;
     }
     &:active {

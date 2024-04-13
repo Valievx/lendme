@@ -2,24 +2,16 @@
   display: flex;
   flex-direction: column;
   padding: 0 $padding-lr;
+  
   &__title {
     @include suptitle-page;
   }
   &__inner {
     @include flex-row-center;
     justify-content: center;
-    column-gap: 9px;
   }
   &__items {
     max-width: 100%;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 245px));
-    grid-template-rows: 1fr;
-    justify-content: center;
-    column-gap: 48px;
     @include mp-null;
-  }
-  &__list {
-    @include mp-null-list;
   }
 }

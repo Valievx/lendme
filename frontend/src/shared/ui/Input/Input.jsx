@@ -16,6 +16,7 @@ export const Input = (props) => {
       type={inputType}
       name={inputName}
       value={inputValue || ''}
+      onChange={()=>{}}
       {...otherProps}
     />
   );

@@ -9,7 +9,7 @@ export const CardProduct = (props) => {
 
   return (
     <div className="cardProduct">
-      <CardItem  className="cartItem__product" text={data.text} src={data.src} />
+      <CardItem  className="cardItem__product" data={data} />
       <div className="cardProduct__description">
         <div className="cardProduct__text-box">
           <p className="cardProduct__category">{data.category}</p>

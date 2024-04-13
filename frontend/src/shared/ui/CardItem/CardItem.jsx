@@ -1,12 +1,12 @@
 // import React from 'react';
 import './CardItem.scss';
 export const CardItem = (props) => {
-  const { className, src, text } = props;
+  const { className, data } = props;
 
   return (
-    <li className={`cartItem ${className}`}>
-      <img className="cartItem__img" src={src} alt={text} />
-     <p className="cartItem__text">{text}</p> 
+    <li className={`cardItem ${className}`}>
+      <img className="cardItem__img" src={data.src} alt={data.text} />
+     <p className="cardItem__text">{data.text}</p> 
     </li>
   );
 };
