@@ -1,7 +1,7 @@
-import './LinkIcons.scss' 
+import './LinkIcons.scss';
 
 export const LinkIcons = (props) => {
-  const { title, icon, className } = props;
+  const { title, icon, className = 'linkIcon' } = props;
   return (
     <div className={className}>
       <img src={icon} alt={title} />

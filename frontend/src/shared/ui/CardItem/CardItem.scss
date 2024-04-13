@@ -1,12 +1,25 @@
 .cartItem {
+  width: 100%;
+  @include mp-null-list;
   &__img {
     width: 100%;
     border-radius: $border-radius-m;
     background-color: $gray;
     margin-bottom: 16px;
+    object-fit: cover;
+    object-position: center;
   }
   &__text {
     @include use-font();
     @include mp-null;
+  }
+
+  &__product {
+    img {
+      height: 245px;
+    }
+    p {
+      padding: 0 16px;
+    }
   }
 }

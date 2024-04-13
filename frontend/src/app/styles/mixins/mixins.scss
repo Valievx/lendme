@@ -32,6 +32,7 @@
   @include use-font($font-size, $line-height);
   padding-bottom: 32px;
   color: $black;
+  text-align: left;
 }
 
 // BLOCKS

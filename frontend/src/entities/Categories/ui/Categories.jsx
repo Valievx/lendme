@@ -1,5 +1,5 @@
 // import React from 'react';
-import { cardItemsData } from '../../../shared/consts/cartItemsData';
+import { cardItemsData } from '../../../shared/consts/cardItemsData';
 import { CardItem } from '../../../shared/ui/CardItem/CardItem';
 import { Button } from '../../../shared/ui/Button/Button';
 import './Categories.scss';

@@ -8,6 +8,17 @@
   box-sizing: border-box;
   color: $main-white;
 
+  &__like {
+    width: 38px;
+    height: 38px;
+    background: url('./icons/like-icon.svg') center no-repeat $gray;
+    border-radius: 50%;
+    &-product{
+      position: absolute;
+      top: 16px;
+      right: 16px;
+    }
+  }
   &__coral {
     @include use-font(18px, 24px, 400);
     padding: 10px 24px;
