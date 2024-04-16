@@ -11,89 +11,89 @@ import './Categories.scss';
 import { Icon } from '../../../shared/ui/Icon/Icon';
 
 export const Categories = () => {
-  const [statusBtnSlide, setStatusBtnSlide] = useState({
-    start: true,
-    end: false,
-  });
-  const swiper = React.useRef(null);
+	const [statusBtnSlide, setStatusBtnSlide] = useState({
+		start: true,
+		end: false,
+	});
+	const swiper = React.useRef(null);
 
-  const handleDisBtn = () => {
-    if (swiper.current && swiper.current.swiper) {
-      setStatusBtnSlide({
-        start: swiper.current.swiper.isBeginning,
-        end: swiper.current.swiper.isEnd,
-      });
-    }
-  };
+	const handleDisBtn = () => {
+		if (swiper.current && swiper.current.swiper) {
+			setStatusBtnSlide({
+				start: swiper.current.swiper.isBeginning,
+				end: swiper.current.swiper.isEnd,
+			});
+		}
+	};
 
-  const changeSlideBtn = (side) => {
-    if (swiper.current && swiper.current.swiper) {
-      side === 'prev'
-        ? swiper.current.swiper.slidePrev()
-        : side === 'next'
-        ? swiper.current.swiper.slideNext()
-        : console.log('Слайд не найден');
-    }
-  };
+	const changeSlideBtn = (side) => {
+		if (swiper.current && swiper.current.swiper) {
+			side === 'prev'
+				? swiper.current.swiper.slidePrev()
+				: side === 'next'
+					? swiper.current.swiper.slideNext()
+					: console.log('Слайд не найден');
+		}
+	};
 
-  return (
-    <section className="categories">
-      <h2 className="categories__title">Выберите категорию</h2>
-      <div className="categories__inner">
-        <Button
-          className="button__coral button__coral_slider"
-          onClick={() => changeSlideBtn('prev')}
-          disabled={statusBtnSlide.start}
-        >
-          <Icon className="svg-slider" id="left-btn"/>
-        </Button>
-        <Swiper
-          // slidesPerView={5}
-          // spaceBetween={48}
-          onSlideChange={() => {
-            console.log('slide', statusBtnSlide);
-            handleDisBtn();
-          }}
-          tag="ul"
-          freeMode={true}
-          pagination={{
-            clickable: true,
-          }}
-          modules={[FreeMode]}
-          breakpoints={{
-            640: {
-              slidesPerView: 2,
-              spaceBetween: 20,
-            },
-            768: {
-              slidesPerView: 3,
-              spaceBetween: 30,
-            },
-            1624: {
-              slidesPerView: 5,
-              spaceBetween: 48,
-            },
-          }}
-          ref={swiper}
-          className="categories__items">
-          {cardItemsData.map((item) => (
-            <SwiperSlide key={item.id} className="categories__items">
-              <CardItem
-                // key={item.id}
-                data={item}
-                className="cardItem__categories"
-              />
-            </SwiperSlide>
-          ))}
-        </Swiper>
-        <Button
-          className="button__coral button__coral_slider"
-          onClick={() => changeSlideBtn('next')}
-          disabled={statusBtnSlide.end}
-        >
-           <Icon className="svg-slider" id="right-btn"/>
-        </Button>
-      </div>
-    </section>
-  );
+	return (
+		<section className="categories">
+			<h2 className="categories__title">Выберите категорию</h2>
+			<div className="categories__inner">
+				<Button
+					className="button__coral button__coral_slider"
+					onClick={() => changeSlideBtn('prev')}
+					disabled={statusBtnSlide.start}
+				>
+					<Icon className="svg-slider" id="left-btn" />
+				</Button>
+				<Swiper
+					// slidesPerView={5}
+					// spaceBetween={48}
+					onSlideChange={() => {
+						handleDisBtn();
+					}}
+					tag="ul"
+					freeMode={true}
+					pagination={{
+						clickable: true,
+					}}
+					modules={[FreeMode]}
+					breakpoints={{
+						640: {
+							slidesPerView: 2,
+							spaceBetween: 20,
+						},
+						768: {
+							slidesPerView: 3,
+							spaceBetween: 30,
+						},
+						1624: {
+							slidesPerView: 5,
+							spaceBetween: 48,
+						},
+					}}
+					ref={swiper}
+					className="categories__items"
+				>
+					{cardItemsData.map((item) => (
+						<SwiperSlide key={item.id} className="categories__items">
+							<CardItem
+								// key={item.id}
+								data={item}
+								className="cardItem__categories"
+							/>
+						</SwiperSlide>
+					))}
+				</Swiper>
+				<Button
+					className="button__coral button__coral_slider"
+					onClick={() => changeSlideBtn('next')}
+					disabled={statusBtnSlide.end}
+				>
+					<Icon className="svg-slider" id="right-btn" />
+				</Button>
+			</div>
+		</section>
+	);
 };

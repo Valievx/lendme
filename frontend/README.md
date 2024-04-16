@@ -1,9 +1,11 @@
 # LendMe
 
 ## Описание
+
 Наш сервис по "Аренде полезных вещей" - сервис где каждый пользователь может взять нужную ему вещь в аренду, так же и сдать.
 
 ## Стек
+
 - `React`
 - `Figma`
 
@@ -11,15 +13,14 @@
 
 1. Клонировать репозиторий
 
-    `git clone https://github.com/Valievx/lendme_django.git`
+   `git clone https://github.com/Valievx/lendme_django.git`
 
 2. Установить зависимости
 
-    `cd frontend`
+   `cd frontend`
 
-    `npm install`
+   `npm install`
 
 3. Для запуска использовать команды
 
-    `npm run dev`
-
+   `npm run dev`
