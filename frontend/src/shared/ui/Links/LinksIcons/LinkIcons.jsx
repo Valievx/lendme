@@ -1,10 +1,11 @@
+import { Icon } from '../../Icon/Icon';
 import './LinkIcons.scss';
 
 export const LinkIcons = (props) => {
-  const { title, icon, className = 'linkIcon' } = props;
+  const { title, iconId, classIcon, className = 'linkIcon' } = props;
   return (
     <div className={className}>
-      <img src={icon} alt={title} />
+      <Icon id={iconId} className={classIcon}/>
       <span>{title}</span>
     </div>
   );

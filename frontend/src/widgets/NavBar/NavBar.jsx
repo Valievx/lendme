@@ -6,7 +6,7 @@ export const NavBar = () => {
   return (
     <div className="navbar">
       {dataNavLinks.map((navLink) => (
-        <LinkIcons key={navLink.id} title={navLink.title} icon={navLink.icon} className="linkIcon" />
+        <LinkIcons key={navLink.id} className="linkIcon" classIcon="svg"  {...navLink} />
       ))}
     </div>
   );

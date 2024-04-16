@@ -1,5 +1,5 @@
-import iconCity from '../assets/icons/map-city-icon.svg';
 import imgTest from '../assets/card-test.jpg';
+
 export const cardProductData = [
   {
     id: 1,
@@ -9,7 +9,6 @@ export const cardProductData = [
     price: "4000Р / 1 день",
     date: "Сегодня 13:08",
     location: "Москва",
-    icon: iconCity
   },
   {
     id: 2,
@@ -19,7 +18,6 @@ export const cardProductData = [
     price: "3000Р / 1 день",
     date: "Сегодня 15:30",
     location: "Санкт-Петербург",
-    icon: iconCity
   },
   {
     id: 3,
@@ -29,7 +27,6 @@ export const cardProductData = [
     price: "2000Р / 1 день",
     date: "Вчера 18:45",
     location: "Екатеринбург",
-    icon: iconCity
   },
   {
     id: 4,
@@ -39,7 +36,6 @@ export const cardProductData = [
     price: "5000Р / 1 день",
     date: "Сегодня 10:20",
     location: "Казань",
-    icon: iconCity
   },
   {
     id: 5,
@@ -49,7 +45,6 @@ export const cardProductData = [
     price: "1500Р / 1 день",
     date: "Сегодня 12:00",
     location: "Новосибирск",
-    icon: iconCity
   },
   {
     id: 6,
@@ -59,7 +54,6 @@ export const cardProductData = [
     price: "3500Р / 1 день",
     date: "Сегодня 17:10",
     location: "Ростов-на-Дону",
-    icon: iconCity
   },
   {
     id: 7,
@@ -69,7 +63,6 @@ export const cardProductData = [
     price: "1000Р / 1 день",
     date: "Вчера 22:30",
     location: "Красноярск",
-    icon: iconCity
   },
   {
     id: 8,
@@ -79,6 +72,5 @@ export const cardProductData = [
     price: "2500Р / 1 день",
     date: "Сегодня 16:45",
     location: "Уфа",
-    icon: iconCity
   }
 ];

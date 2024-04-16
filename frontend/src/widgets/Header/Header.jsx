@@ -3,7 +3,6 @@ import HeaderInfoLinks from '../../shared/ui/HeaderInfoLinks/HeaderInfoLinks';
 import { NavBar } from '../NavBar/NavBar';
 import { Button } from '../../shared/ui/Button/Button';
 import { LinkIcons } from '../../shared/ui/Links/LinksIcons/LinkIcons';
-import profileLogo from '../../shared/assets/icons/login-profile-icon.svg';
 import { CategoriesBar } from '../CategoriesBar/CategoriesBar';
 
 export const Header = () => {
@@ -15,7 +14,7 @@ export const Header = () => {
         <div className="header__main_box">
           <NavBar />
           <div className="header__login">
-            <LinkIcons title="Вход и регистрация" icon={profileLogo} className="linkIconLogin" />
+            <LinkIcons title="Вход и регистрация" className="linkIconLogin" iconId="login-profile" classIcon="svg-login" />
             <Button className="button__coral">Разместить объявление</Button>
           </div>
         </div>

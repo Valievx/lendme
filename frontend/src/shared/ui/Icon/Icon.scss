@@ -1,7 +1,6 @@
 .svg {
   width: 24px;
   height: 24px;
-
   &-slider {
     width: 15px;
     height: 20px;
@@ -10,6 +9,14 @@
   &-like {
     width: 18px;
     height: 17px;
+  }
+
+  &-login {
+    width: 40px;
+    height: 40px;
+    border: #000 2px solid;
+    border-radius: 50%;
+    padding: 6px;
   }
 
   &:hover {

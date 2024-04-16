@@ -8,6 +8,7 @@ import { cardItemsData } from '../../../shared/consts/cardItemsData';
 import { CardItem } from '../../../shared/ui/CardItem/CardItem';
 import { Button } from '../../../shared/ui/Button/Button';
 import './Categories.scss';
+import { Icon } from '../../../shared/ui/Icon/Icon';
 
 export const Categories = () => {
   const [statusBtnSlide, setStatusBtnSlide] = useState({
@@ -40,10 +41,12 @@ export const Categories = () => {
       <h2 className="categories__title">Выберите категорию</h2>
       <div className="categories__inner">
         <Button
-          className="button__coral button__coral_slider button__coral_slider-left"
+          className="button__coral button__coral_slider"
           onClick={() => changeSlideBtn('prev')}
           disabled={statusBtnSlide.start}
-        />
+        >
+          <Icon className="svg-slider" id="left-btn"/>
+        </Button>
         <Swiper
           // slidesPerView={5}
           // spaceBetween={48}
@@ -84,10 +87,12 @@ export const Categories = () => {
           ))}
         </Swiper>
         <Button
-          className="button__coral button__coral_slider button__coral_slider-right"
+          className="button__coral button__coral_slider"
           onClick={() => changeSlideBtn('next')}
           disabled={statusBtnSlide.end}
-        />
+        >
+           <Icon className="svg-slider" id="right-btn"/>
+        </Button>
       </div>
     </section>
   );
