@@ -1,0 +1,21 @@
+.swiper-subtitle {
+  position: relative;
+  width: calc(100% + 80px); /* Увеличиваем ширину на 80px для компенсации padding родительского элемента */
+  margin-left: -40px; 
+  // width: 100%;
+  display: flex;
+}
+
+.subtitle-item {
+  width: 50%;
+  @include use-font;
+  @include mp-null;
+  cursor: pointer;
+  border-bottom: 1px solid $gray-btn-text;
+  padding: 32px 0;
+}
+
+.subtitle-item.active {
+  color: $main-coral;
+  border-bottom: 3px solid $main-coral;
+}

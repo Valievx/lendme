@@ -9,6 +9,11 @@
   list-style-type: none;
 }
 
+@mixin link-null {
+  text-decoration: none;
+  cursor: pointer;
+}
+
 // FONTS
 // значения по умолчанию не менять!
 // там где используются данные параметры , просто надо вызвать миксин
@@ -26,6 +31,14 @@
   font-family: $font-family;
 }
 
+// для информации под импутами, текст с маленьким шрифтом.
+@mixin text-info {
+  @include use-font(14px, 16px, 400);
+  @include mp-null();
+  display: block;
+  min-height: 34px;
+  border: 0;
+}
 // заголовки второго уровня для блоков
 @mixin suptitle-page($font-size: 40px, $line-height: 48px) {
   @include mp-null;
@@ -44,4 +57,10 @@
 @mixin flex-row-center {
   display: flex;
   align-items: center;
+}
+
+@mixin flex-column-container {
+  display: flex;
+  flex-direction: column;
+  row-gap: $row-gap-l;
 }

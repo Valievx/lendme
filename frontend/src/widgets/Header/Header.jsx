@@ -2,10 +2,13 @@ import './Header.scss';
 import HeaderInfoLinks from '../../shared/ui/HeaderInfoLinks/HeaderInfoLinks';
 import { NavBar } from '../NavBar/NavBar';
 import { Button } from '../../shared/ui/Button/Button';
-import { LinkIcons } from '../../shared/ui/Links/LinksIcons/LinkIcons';
+// import { LinkIcons } from '../../shared/ui/Links/LinksIcons/LinkIcons';
 import { CategoriesBar } from '../CategoriesBar/CategoriesBar';
+import usePopupOpen from '../../shared/libs/helpers/usePopupOpen';
+import { LoginForms } from '../Forms/LoginForms/LoginForms';
 
 export const Header = () => {
+	const { isOpenPopup, handleOpenPopup, handleClosePopup } = usePopupOpen();
 	return (
 		<header className="header">
 			<HeaderInfoLinks />
@@ -14,17 +17,24 @@ export const Header = () => {
 				<div className="header__main_box">
 					<NavBar />
 					<div className="header__login">
-						<LinkIcons
+						<Button
+							className="button__coral button__coral_transparent"
+							onClick={() => handleOpenPopup()}
+						>
+							Вход и регистрация
+						</Button>
+						{/* <LinkIcons
 							title="Вход и регистрация"
 							className="linkIconLogin"
 							iconId="login-profile"
 							classIcon="svg-login"
-						/>
+						/> */}
 						<Button className="button__coral">Разместить объявление</Button>
 					</div>
 				</div>
 			</section>
 			<CategoriesBar />
+			<LoginForms isOpenPopup={isOpenPopup} onClosePopup={handleClosePopup} />
 		</header>
 	);
 };

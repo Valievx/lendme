@@ -1,10 +1,24 @@
 .input {
-  position: relative; 
+  position: relative;
   background: $main-white;
   border-radius: $border-radius-s;
   border: 1px $main-coral solid;
   z-index: 0;
-  
+  &__text {
+    @include text-info;
+    align-self: self-start;
+
+    &_error {
+      color: $alert-red;
+      padding-top: 5px;
+      padding-left: 20px;
+    }
+
+    &_info {
+      padding-top: 5px;
+      padding-left: 20px;
+    }
+  }
   &__search {
     width: 100%;
     position: relative;
@@ -14,7 +28,22 @@
     background-position: 24px 12px;
     background-size: 15px;
   }
-  
+  // убирает дефолтный показ иконки пароля в Microsoft Edge
+  &::-ms-reveal {
+    display: none;
+  }
+
+  &__form {
+    padding: 16px 8px;
+    border-radius: $border-radius-s;
+    border: 1px $form-white solid;
+  }
+  &__label {
+    @include use-font(14px, 16px, 400);
+    padding-left: 12px;
+    color: $black;
+    transform: translateY(-10px);
+  }
   &-error {
     // для теста
     color: $active-coral;
