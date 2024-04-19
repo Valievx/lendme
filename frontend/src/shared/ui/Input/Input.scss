@@ -4,19 +4,20 @@
   border-radius: $border-radius-s;
   border: 1px $main-coral solid;
   z-index: 0;
+
+    &_error {
+    color: $alert-red;
+    &:focus {
+      border: 1px $alert-red solid;
+    }
+  }
   &__text {
     @include text-info;
     align-self: self-start;
+    padding-top: 10px;
 
     &_error {
       color: $alert-red;
-      padding-top: 5px;
-      padding-left: 20px;
-    }
-
-    &_info {
-      padding-top: 5px;
-      padding-left: 20px;
     }
   }
   &__search {
@@ -43,9 +44,8 @@
     padding-left: 12px;
     color: $black;
     transform: translateY(-10px);
-  }
-  &-error {
-    // для теста
-    color: $active-coral;
+    &_error {
+      color: $alert-red;
+    }
   }
 }

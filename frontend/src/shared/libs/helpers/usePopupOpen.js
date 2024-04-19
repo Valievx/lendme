@@ -22,10 +22,12 @@ export default function usePopupOpen() {
 			}
 		}
 
+  
 		function closeByOverlayClick(evt) {
 			if (
 				evt.target.classList.contains('popup') ||
-				evt.target.classList.contains('svg-close')
+				evt.target.classList.contains('button__close') || 
+        evt.target.classList.contains('svg-close') 
 			) {
 				handleClosePopup();
 			}

@@ -14,20 +14,21 @@ export const Input = (props) => {
 
 	return (
 		<>
-			{inputValue && (
+			{inputLabelText && (
 				<label
 					htmlFor={inputName}
 					tabIndex="-1"
-					className={`input__label ${inputError ? 'input__label-error' : ''}`}
+					className={`input__label ${inputError ? 'input__label_error' : ''}`}
 				>
 					{inputLabelText}
 				</label>
 			)}
 			<input
-				className={`input ${inputClass} ${inputError ? 'input-error' : ''}`}
+				className={`input ${inputClass} ${inputError ? 'input_error' : ''}`}
 				type={inputType}
 				name={inputName}
 				value={inputValue || ''}
+        autoComplete='off'
 				onChange={() => {}}
 				{...otherProps}
 			/>
