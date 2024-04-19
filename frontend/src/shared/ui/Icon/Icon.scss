@@ -5,6 +5,16 @@
     width: 15px;
     height: 20px;
   }
+&-close{
+  width: 24px;
+  height: 24px;
+  stroke: #fff;
+  stroke-width: 2;
+}
+  &-social_link {
+    width: 44px;
+    height: 44px;
+  }
 
   &-like {
     width: 18px;
@@ -17,9 +27,5 @@
     border: #000 2px solid;
     border-radius: 50%;
     padding: 6px;
-  }
-
-  &:hover {
-    fill: yellow;
   }
 }
