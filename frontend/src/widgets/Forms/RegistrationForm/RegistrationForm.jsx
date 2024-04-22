@@ -1,26 +1,38 @@
+// import React from 'react';
+
 import { InitialForm } from '../../../entities/InitialForm';
-import { Input } from '../../../shared/ui/Input/Input';
 import { Button } from '../../../shared/ui/Button/Button';
-import Checkbox from '../../../shared/ui/Checkbox/Checkbox';
+import { Input } from '../../../shared/ui/Input/Input';
 import useFormAndValidation from '../../../shared/libs/helpers/useFormAndValidation';
 import { validationSchemaAuthForms } from '../../../shared/consts/validationSchemas';
 import usePopupOpen from '../../../shared/libs/helpers/usePopupOpen';
+import Checkbox from '../../../shared/ui/Checkbox/Checkbox';
 
-export const LoginForms = ({ onTitleClick }) => {
+export const RegistrationForm = ({ onTitleClick }) => {
 	const { handleClosePopup } = usePopupOpen();
-
 	const { form, errors, isFormValid, handleChange, handleSubmit } =
 		useFormAndValidation(
 			{
+				username: '',
 				email: '',
 				password: '',
+				confirmPass: '',
 			},
 			validationSchemaAuthForms
 		);
-	console.log(form);
 
 	return (
 		<InitialForm formClass="forms" onSubmit={handleSubmit}>
+			<Input
+				inputClass="input__form"
+				inputName="username"
+				inputValue={form.username}
+				placeholder="Ваше имя"
+				inputLabelText="Ваше имя на сайте *"
+				onChange={handleChange}
+				inputError={errors.username}
+			/>
+
 			<Input
 				inputClass="input__form"
 				inputName="email"
@@ -30,27 +42,37 @@ export const LoginForms = ({ onTitleClick }) => {
 				onChange={handleChange}
 				inputError={errors.email}
 			/>
+
 			<Input
 				inputClass="input__form"
 				inputType="password"
+				inputName="password"
 				inputValue={form.password}
 				placeholder="Введите пароль"
-				inputLabelText="Пароль*"
-				inputName="password"
+				inputLabelText="Пароль *"
 				onChange={handleChange}
 				inputError={errors.password}
 			/>
+			<Input
+				inputClass="input__form"
+				inputType="password"
+				inputName="confirmPass"
+				inputValue={form.confirmPass}
+				placeholder="Введите пароль"
+				inputLabelText="Подтвердитe пароль *"
+				onChange={handleChange}
+				inputError={errors.confirmPass}
+			/>
 			<Checkbox label="Запомнить меня" />
-
 			<Button
 				className="button__coral button__coral_forms"
 				type="submit"
 				onClick={handleClosePopup}
 				disabled={!isFormValid}
 			>
-				Войти
+				Зарегистрироваться
 			</Button>
-			<a href="#" className="loginForm__link" onClick={() => onTitleClick(2)}>
+			<a href="#" className="forms__link" onClick={() => onTitleClick(2)}>
 				Забыли пароль?
 			</a>
 		</InitialForm>

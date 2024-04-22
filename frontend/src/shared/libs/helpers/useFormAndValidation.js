@@ -69,11 +69,11 @@ const useFormAndValidation = (initialState, validationSchema) => {
 			});
 	};
 
-  // функция сабмита
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // resetForm();
-  };
+	// функция сабмита
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		// resetForm();
+	};
 
 	const handleSelectChange = (selectedObj) => {
 		setForm((prevState) => ({
@@ -98,7 +98,7 @@ const useFormAndValidation = (initialState, validationSchema) => {
 		handleFocus,
 		handleBlur,
 		updateFormInput,
-    handleSubmit,
+		handleSubmit,
 		isActiveInput,
 	};
 };

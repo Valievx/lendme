@@ -28,7 +28,7 @@ export const Input = (props) => {
 				type={inputType}
 				name={inputName}
 				value={inputValue || ''}
-        autoComplete='off'
+				autoComplete="off"
 				onChange={() => {}}
 				{...otherProps}
 			/>

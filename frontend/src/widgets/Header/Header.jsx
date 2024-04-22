@@ -2,13 +2,12 @@ import './Header.scss';
 import HeaderInfoLinks from '../../shared/ui/HeaderInfoLinks/HeaderInfoLinks';
 import { NavBar } from '../NavBar/NavBar';
 import { Button } from '../../shared/ui/Button/Button';
-// import { LinkIcons } from '../../shared/ui/Links/LinksIcons/LinkIcons';
 import { CategoriesBar } from '../CategoriesBar/CategoriesBar';
 import usePopupOpen from '../../shared/libs/helpers/usePopupOpen';
-import { LoginForms } from '../Forms/LoginForms/LoginForms';
+import { GeneralForm } from '../Forms';
 
 export const Header = () => {
-	const { isOpenPopup, handleOpenPopup, handleClosePopup } = usePopupOpen();
+	const { isOpenPopup, handleOpenPopup } = usePopupOpen();
 	return (
 		<header className="header">
 			<HeaderInfoLinks />
@@ -34,7 +33,7 @@ export const Header = () => {
 				</div>
 			</section>
 			<CategoriesBar />
-			<LoginForms isOpenPopup={isOpenPopup} onClosePopup={handleClosePopup} />
+			<GeneralForm isOpenPopup={isOpenPopup} />
 		</header>
 	);
 };

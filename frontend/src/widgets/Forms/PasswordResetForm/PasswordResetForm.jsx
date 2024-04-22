@@ -1,23 +1,22 @@
+// import React from 'react';
+
 import { InitialForm } from '../../../entities/InitialForm';
-import { Input } from '../../../shared/ui/Input/Input';
-import { Button } from '../../../shared/ui/Button/Button';
-import Checkbox from '../../../shared/ui/Checkbox/Checkbox';
-import useFormAndValidation from '../../../shared/libs/helpers/useFormAndValidation';
 import { validationSchemaAuthForms } from '../../../shared/consts/validationSchemas';
+import useFormAndValidation from '../../../shared/libs/helpers/useFormAndValidation';
+import { Input } from '../../../shared/ui/Input/Input';
+// import './PasswordResetForm.scss';
+import { Button } from '../../../shared/ui/Button/Button';
 import usePopupOpen from '../../../shared/libs/helpers/usePopupOpen';
 
-export const LoginForms = ({ onTitleClick }) => {
+export const PasswordResetForm = ({ onTitleClick }) => {
 	const { handleClosePopup } = usePopupOpen();
-
 	const { form, errors, isFormValid, handleChange, handleSubmit } =
 		useFormAndValidation(
 			{
 				email: '',
-				password: '',
 			},
 			validationSchemaAuthForms
 		);
-	console.log(form);
 
 	return (
 		<InitialForm formClass="forms" onSubmit={handleSubmit}>
@@ -28,19 +27,9 @@ export const LoginForms = ({ onTitleClick }) => {
 				placeholder="E-mail"
 				inputLabelText="E-mail*"
 				onChange={handleChange}
+				inputInfo="Введите ваш E-mail указанный при регистрации. Мы отправим на него временный пароль"
 				inputError={errors.email}
 			/>
-			<Input
-				inputClass="input__form"
-				inputType="password"
-				inputValue={form.password}
-				placeholder="Введите пароль"
-				inputLabelText="Пароль*"
-				inputName="password"
-				onChange={handleChange}
-				inputError={errors.password}
-			/>
-			<Checkbox label="Запомнить меня" />
 
 			<Button
 				className="button__coral button__coral_forms"
@@ -48,10 +37,10 @@ export const LoginForms = ({ onTitleClick }) => {
 				onClick={handleClosePopup}
 				disabled={!isFormValid}
 			>
-				Войти
+				Отправить пароль
 			</Button>
-			<a href="#" className="loginForm__link" onClick={() => onTitleClick(2)}>
-				Забыли пароль?
+			<a href="#" className="loginForm__link" onClick={() => onTitleClick(0)}>
+				Назад
 			</a>
 		</InitialForm>
 	);

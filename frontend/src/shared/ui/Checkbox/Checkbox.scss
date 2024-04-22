@@ -1,8 +1,7 @@
-// $icon-like: '../../../shared/ui/Icon/icons/sprite.svg#like';
-// @import url('../../../shared/ui/Icon/icons/sprite.svg#like-btn');
 .checkbox-container {
   display: flex;
   align-items: center;
+  height: 24px;
 
   .checkbox-input {
     display: none; // Скрывает оригинальный чекбокс
@@ -31,7 +30,6 @@
   }
 
   .checkbox-label {
-    font-size: 16px;
-    margin-left: 10px;
+    @include use-font(14px, 16px, 400);
   }
 }

@@ -15,6 +15,7 @@
     @include text-info;
     align-self: self-start;
     padding-top: 10px;
+    padding-bottom: 24px;
 
     &_error {
       color: $alert-red;
@@ -38,6 +39,9 @@
     padding: 16px 8px;
     border-radius: $border-radius-s;
     border: 1px $form-white solid;
+    &_error {
+      color: $alert-red;
+    }
   }
   &__label {
     @include use-font(14px, 16px, 400);
