@@ -33,7 +33,7 @@
 
 // для информации под импутами, текст с маленьким шрифтом.
 @mixin text-info {
-  @include use-font(14px, 16px, 400);
+  @include use-font(12px, 14px, 400);
   @include mp-null();
   display: block;
   min-height: 40px;
