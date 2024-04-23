@@ -7,7 +7,7 @@ import usePopupOpen from '../../shared/libs/helpers/usePopupOpen';
 import { GeneralForm } from '../Forms';
 
 export const Header = () => {
-	const { isOpenPopup, handleOpenPopup } = usePopupOpen();
+	const { isOpenPopup, handleOpenPopup, handleClosePopup } = usePopupOpen();
 	return (
 		<header className="header">
 			<HeaderInfoLinks />
@@ -33,7 +33,7 @@ export const Header = () => {
 				</div>
 			</section>
 			<CategoriesBar />
-			<GeneralForm isOpenPopup={isOpenPopup} />
+			<GeneralForm isOpenPopup={isOpenPopup} onClosePopup={handleClosePopup} />
 		</header>
 	);
 };

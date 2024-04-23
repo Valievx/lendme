@@ -6,14 +6,15 @@
   padding-right: $padding-lr;
 
   &__inner {
-    width: 80%;
     @include flex-row-center;
+    width: 80%;
     column-gap: 20px;
   }
   &__input-box {
+    @include flex-column-center;
     max-width: 1167px;
     width: 100%;
     position: relative;
-    @include flex-row-center;
+    height: 44px;
   }
 }

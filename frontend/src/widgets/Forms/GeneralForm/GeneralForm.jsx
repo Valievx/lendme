@@ -14,7 +14,7 @@ import { LoginForms, RegistrationForm, PasswordResetForm } from '../';
 export const GeneralForm = (props) => {
 	let formComponent = null;
 	let titlesForm = [];
-	const { isOpenPopup } = props;
+	const { isOpenPopup, onClosePopup } = props;
 	const [activeIndex, setActiveIndex] = useState(0);
 
 	const handleTitleClick = (index) => {
@@ -24,15 +24,30 @@ export const GeneralForm = (props) => {
 	switch (activeIndex) {
 		case 0:
 			titlesForm = titlesLogin;
-			formComponent = <LoginForms onTitleClick={handleTitleClick} />;
+			formComponent = (
+				<LoginForms
+					onTitleClick={handleTitleClick}
+					onClosePopup={onClosePopup}
+				/>
+			);
 			break;
 		case 1:
 			titlesForm = titlesLogin;
-			formComponent = <RegistrationForm onTitleClick={handleTitleClick} />;
+			formComponent = (
+				<RegistrationForm
+					onTitleClick={handleTitleClick}
+					onClosePopup={onClosePopup}
+				/>
+			);
 			break;
 		case 2:
 			titlesForm = titlesPassword;
-			formComponent = <PasswordResetForm onTitleClick={handleTitleClick} />;
+			formComponent = (
+				<PasswordResetForm
+					onTitleClick={handleTitleClick}
+					onClosePopup={onClosePopup}
+				/>
+			);
 			break;
 		default:
 			formComponent = null;

@@ -6,17 +6,20 @@ import useFormAndValidation from '../../../shared/libs/helpers/useFormAndValidat
 import { Input } from '../../../shared/ui/Input/Input';
 // import './PasswordResetForm.scss';
 import { Button } from '../../../shared/ui/Button/Button';
-import usePopupOpen from '../../../shared/libs/helpers/usePopupOpen';
 
-export const PasswordResetForm = ({ onTitleClick }) => {
-	const { handleClosePopup } = usePopupOpen();
-	const { form, errors, isFormValid, handleChange, handleSubmit } =
-		useFormAndValidation(
-			{
-				email: '',
-			},
-			validationSchemaAuthForms
-		);
+export const PasswordResetForm = ({ onTitleClick, onClosePopup }) => {
+	const { form, errors, handleChange, isFormValid } = useFormAndValidation(
+		{
+			email: '',
+		},
+		validationSchemaAuthForms
+	);
+
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		console.log(form);
+		onClosePopup();
+	};
 
 	return (
 		<InitialForm formClass="forms" onSubmit={handleSubmit}>
@@ -34,7 +37,6 @@ export const PasswordResetForm = ({ onTitleClick }) => {
 			<Button
 				className="button__coral button__coral_forms"
 				type="submit"
-				onClick={handleClosePopup}
 				disabled={!isFormValid}
 			>
 				Отправить пароль

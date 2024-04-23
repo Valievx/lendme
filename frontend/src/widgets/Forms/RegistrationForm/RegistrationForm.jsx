@@ -5,21 +5,24 @@ import { Button } from '../../../shared/ui/Button/Button';
 import { Input } from '../../../shared/ui/Input/Input';
 import useFormAndValidation from '../../../shared/libs/helpers/useFormAndValidation';
 import { validationSchemaAuthForms } from '../../../shared/consts/validationSchemas';
-import usePopupOpen from '../../../shared/libs/helpers/usePopupOpen';
 import Checkbox from '../../../shared/ui/Checkbox/Checkbox';
 
-export const RegistrationForm = ({ onTitleClick }) => {
-	const { handleClosePopup } = usePopupOpen();
-	const { form, errors, isFormValid, handleChange, handleSubmit } =
-		useFormAndValidation(
-			{
-				username: '',
-				email: '',
-				password: '',
-				confirmPass: '',
-			},
-			validationSchemaAuthForms
-		);
+export const RegistrationForm = ({ onTitleClick, onClosePopup }) => {
+	const { form, errors, isFormValid, handleChange } = useFormAndValidation(
+		{
+			username: '',
+			email: '',
+			password: '',
+			confirmPass: '',
+		},
+		validationSchemaAuthForms
+	);
+
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		console.log(form);
+		onClosePopup();
+	};
 
 	return (
 		<InitialForm formClass="forms" onSubmit={handleSubmit}>
@@ -67,7 +70,6 @@ export const RegistrationForm = ({ onTitleClick }) => {
 			<Button
 				className="button__coral button__coral_forms"
 				type="submit"
-				onClick={handleClosePopup}
 				disabled={!isFormValid}
 			>
 				Зарегистрироваться

@@ -4,20 +4,21 @@ import { Button } from '../../../shared/ui/Button/Button';
 import Checkbox from '../../../shared/ui/Checkbox/Checkbox';
 import useFormAndValidation from '../../../shared/libs/helpers/useFormAndValidation';
 import { validationSchemaAuthForms } from '../../../shared/consts/validationSchemas';
-import usePopupOpen from '../../../shared/libs/helpers/usePopupOpen';
 
-export const LoginForms = ({ onTitleClick }) => {
-	const { handleClosePopup } = usePopupOpen();
+export const LoginForms = ({ onTitleClick, onClosePopup }) => {
+	const { form, errors, isFormValid, handleChange } = useFormAndValidation(
+		{
+			email: '',
+			password: '',
+		},
+		validationSchemaAuthForms
+	);
 
-	const { form, errors, isFormValid, handleChange, handleSubmit } =
-		useFormAndValidation(
-			{
-				email: '',
-				password: '',
-			},
-			validationSchemaAuthForms
-		);
-	console.log(form);
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		console.log(form);
+		onClosePopup();
+	};
 
 	return (
 		<InitialForm formClass="forms" onSubmit={handleSubmit}>
@@ -45,7 +46,6 @@ export const LoginForms = ({ onTitleClick }) => {
 			<Button
 				className="button__coral button__coral_forms"
 				type="submit"
-				onClick={handleClosePopup}
 				disabled={!isFormValid}
 			>
 				Войти

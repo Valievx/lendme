@@ -4,8 +4,22 @@ import { Button } from '../../shared/ui/Button/Button';
 import { LinkIcons } from '../../shared/ui/Links/LinksIcons/LinkIcons';
 import { Input } from '../../shared/ui/Input/Input';
 import { Icon } from '../../shared/ui/Icon/Icon';
+import { validationSchemaSearch } from '../../shared/consts/validationSchemas';
+import useFormAndValidation from '../../shared/libs/helpers/useFormAndValidation';
 
 export const CategoriesBar = () => {
+	const { form, errors, isFormValid, handleChange } = useFormAndValidation(
+		{
+			search: '',
+		},
+		validationSchemaSearch
+	);
+
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		console.log(form);
+	};
+
 	return (
 		<section
 			className="categories-bar"
@@ -16,13 +30,22 @@ export const CategoriesBar = () => {
 				Все категории
 			</Button>
 			<div className="categories-bar__inner">
-				<div className="categories-bar__input-box">
+				<form className="categories-bar__input-box" onSubmit={handleSubmit}>
 					<Input
-						inputClass="input__search input__search_type_search"
-						inputName="inputSearch"
+						inputClass="input__search"
+						onChange={handleChange}
+						inputName="search"
+						inputValue={form.search}
+						inputError={errors.search}
 					/>
-					<Button className="button__coral button__coral_search">Найти</Button>
-				</div>
+					<Button
+						className="button__coral button__coral_search"
+						type="submit"
+						disabled={!isFormValid}
+					>
+						Найти
+					</Button>
+				</form>
 				<LinkIcons
 					title="Город"
 					className="linkIconCategories"
