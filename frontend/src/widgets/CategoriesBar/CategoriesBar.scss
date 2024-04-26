@@ -1,5 +1,5 @@
 .categories-bar {
-  width: 100%;
+  @include main-container;
   @include flex-row-center;
   column-gap: $cl-gap-m;
   padding-left: $padding-lr;

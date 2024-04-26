@@ -49,6 +49,12 @@
 }
 
 // BLOCKS
+@mixin main-container {
+  max-width: $max-width;
+  width: 100%;
+  margin: 0 auto;
+}
+
 @mixin flex-column-center {
   @include flex-row-center;
   flex-direction: column;

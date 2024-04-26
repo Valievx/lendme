@@ -8,7 +8,7 @@ import { validationSchemaSearch } from '../../shared/consts/validationSchemas';
 import useFormAndValidation from '../../shared/libs/helpers/useFormAndValidation';
 
 export const CategoriesBar = () => {
-	const { form, errors, isFormValid, handleChange } = useFormAndValidation(
+	const { form, errors, handleChange } = useFormAndValidation(
 		{
 			search: '',
 		},
@@ -41,7 +41,7 @@ export const CategoriesBar = () => {
 					<Button
 						className="button__coral button__coral_search"
 						type="submit"
-						disabled={!isFormValid}
+						// disabled={!isFormValid}
 					>
 						Найти
 					</Button>
