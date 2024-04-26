@@ -43,6 +43,9 @@ INSTALLED_APPS = [
     "deals.apps.DealsConfig",
     "products.apps.ProductsConfig",
     "users.apps.UsersConfig",
+
+    "djoser",
+    "social_django",
 ]
 
 MIDDLEWARE = [
@@ -116,6 +119,38 @@ TIME_ZONE = "UTC"
 USE_I18N = True
 
 USE_TZ = True
+
+
+AUTH_USER_MODEL = "users.CustomUser"
+TOKEN_MODEL = "users.CustomUser"
+
+# Подключим Вконтакте немного позже.
+# SOCIAL_AUTH_USER_MODEL = "users.CustomUser"
+# SOCIAL_AUTH_URL_NAMESPACE = 'social'
+
+# Подключить REST Framework после появления базовых API.
+# REST_FRAMEWORK = {
+#     "DEFAULT_PERMISSION_CLASSES": [
+#         "rest_framework.permissions.AllowAny",
+#     ],
+#     "DEFAULT_AUTHENTICATION_CLASSES": [
+#         "rest_framework.authentication.TokenAuthentication"
+#     ],
+#     # "SEARCH_PARAM": "name",
+#     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+# }
+
+
+SOCIAL_AUTH_PIPELINE = (
+    "social_core.pipeline.social_auth.social_details",
+    "social_core.pipeline.social_auth.social_uid",
+    "social_core.pipeline.social_auth.auth_allowed",
+    "social_core.pipeline.social_auth.social_user",
+    "users.pipelines.save_user_vk",
+    "social_core.pipeline.social_auth.associate_user",
+    "social_core.pipeline.social_auth.load_extra_data",
+    "social_core.pipeline.user.user_details",
+)
 
 
 # Static files (CSS, JavaScript, Images)
