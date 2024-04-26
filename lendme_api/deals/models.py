@@ -17,7 +17,10 @@ class Deals(models.Model):
         on_delete=models.CASCADE,
         related_name="deals",
     )
-    deal_period = models.IntegerField()
+    deal_period = models.DateField(
+        verbose_name="Период сделки",
+        help_text="Укажите период сделки",
+    )
     deal_amount = models.IntegerField()
     confirm_deposite = models.ForeignKey(
         "Deposite",
