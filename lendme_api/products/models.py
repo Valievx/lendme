@@ -2,8 +2,14 @@ from django.db import models
 
 
 class Product(models.Model):
-    title = models.CharField(max_length=100)
-    description = models.TextField()
+    title = models.CharField(
+        verbose_name="Название",
+        max_length=100,
+        unique=False,
+    )
+    description = models.TextField(
+        verbose_name="Описание"
+    )
     address = models.ForeignKey(
         "Address",
         verbose_name="Адрес",
@@ -12,7 +18,9 @@ class Product(models.Model):
     )
     category = ...
     # metro = ...
-    price = models.IntegerField()
+    price = models.IntegerField(
+        verbose_name='Цена'
+    )
     image = models.ImageField(upload_to="products/image_products")
     author = models.ForeignKey(
         "CustomUser",
@@ -21,8 +29,18 @@ class Product(models.Model):
         on_delete=models.CASCADE,
     )
     deposit = ...
-    created_at = models.DateTimeField(auto_now_add=True)
-    time_period = ...
+    created_at = models.DateTimeField(
+        verbose_name="Дата публикации",
+        auto_now_add=True)
+    time_period = models.CharField(
+        verbose_name="Период времени",
+        max_length=20,
+        choices=[
+            ("Час", "Час"),
+            ("Сутки", "Сутки"),
+            ("Месяц", "Месяц"),
+        ]
+    )
 
 
 class Address(models.Model):
