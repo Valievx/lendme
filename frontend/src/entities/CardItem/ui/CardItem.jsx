@@ -1,5 +1,6 @@
 // import React from 'react';
 import './CardItem.scss';
+
 export const CardItem = (props) => {
 	const { className, data } = props;
 

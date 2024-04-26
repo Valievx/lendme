@@ -1,9 +1,9 @@
 // import React from 'react';
 import './CardProduct.scss';
-import { CardItem } from '../../shared/ui/CardItem/CardItem';
-import { LinkIcons } from '../../shared/ui/Links/LinksIcons/LinkIcons';
-import { Button } from '../../shared/ui/Button/Button';
-import { Icon } from '../../shared/ui/Icon/Icon';
+import { CardItem } from '../../CardItem';
+import { LinkIcons } from '../../../shared/ui/Links/LinksIcons/LinkIcons';
+import { Button } from '../../../shared/ui/Button/Button';
+import { Icon } from '../../../shared/ui/Icon/Icon';
 
 export const CardProduct = (props) => {
 	const { data } = props;

@@ -1,6 +1,6 @@
 // import React from 'react';
-import { cardProductData } from '../../../shared/consts/cardProductData';
-import { CardProduct } from '../../../widgets/CardProduct/CardProduct';
+import { cardProductData } from '../../shared/consts/cardProductData';
+import { CardProduct } from '../../entities/CardProduct';
 import './Card.scss';
 
 export const Card = () => {

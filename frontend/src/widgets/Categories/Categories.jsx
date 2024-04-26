@@ -4,11 +4,11 @@ import { FreeMode } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/free-mode';
 
-import { cardItemsData } from '../../../shared/consts/cardItemsData';
-import { CardItem } from '../../../shared/ui/CardItem/CardItem';
-import { Button } from '../../../shared/ui/Button/Button';
 import './Categories.scss';
-import { Icon } from '../../../shared/ui/Icon/Icon';
+import { cardItemsData } from '../../shared/consts/cardItemsData';
+import { CardItem } from '../../entities/CardItem/';
+import { Icon } from '../../shared/ui/Icon/Icon';
+import { Button } from '../../shared/ui/Button/Button';
 
 export const Categories = () => {
 	const [statusBtnSlide, setStatusBtnSlide] = useState({
