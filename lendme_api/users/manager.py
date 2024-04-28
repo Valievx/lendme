@@ -6,27 +6,28 @@ text = ("Ваш пароль: {password}.\n\n"
 
 
 class CustomUserManager(BaseUserManager):
-    """Менеджер модели пользователя, для регистрации с ИНН."""
+    """Менеджер модели пользователя."""
 
     use_in_migrations = True
 
     def create_user(
         self,
-        username,
-        name,
-        email,
-        phone,
-        password,
+        name: str,
+        phone: int,
+        email: str,
+        password: str,
         **extra_fields,
     ):
         extra_fields.setdefault("is_superuser", False)
         extra_fields.setdefault("is_active", True)
 
+        """
+        Создает и сохраняет пользователя с заданными данными.
+        """
         user = self.model(
-            username=username,
             name=name,
-            email=email,
             phone=phone,
+            email=email,
             password=password,
         )
         user.set_password(password)
@@ -35,7 +36,12 @@ class CustomUserManager(BaseUserManager):
         return user
 
     def create_superuser(
-        self, username, password, organization_inn=None, **extra_fields
+        self,
+        name: str,
+        phone: int,
+        email: str,
+        password: str,
+        **extra_fields,
     ):
 
         extra_fields.setdefault("is_superuser", True)
@@ -46,9 +52,13 @@ class CustomUserManager(BaseUserManager):
             raise ValueError(
                 "Суперпользователь должен быть is_superuser=True."
             )
-
+        """
+        Создает и сохраняет супер-пользователя с заданными данными.
+        """
         user = self.create_user(
-            username=username,
+            name=name,
+            phone=phone,
+            email=email,
             password=password,
             **extra_fields,
         )

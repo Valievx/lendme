@@ -1,10 +1,33 @@
 from django.http import HttpResponse
 
+from rest_framework.generics import CreateAPIView
+
+from users.serializers import UserSerializer
+from users.models import CustomUser
+
 def login_view(request):
     return HttpResponse("Login view placeholder")
 
-def register_view(request):
-    return HttpResponse("Register view placeholder")
+class RegisterView(CreateAPIView):
+    """
+    Регистрация
+
+    Регистрация нового пользователя.
+    Требуемые данные: name, email, password and phone.
+    """
+
+    serializer_class = UserSerializer
+
+    def perform_create(self, serializer):
+        """Переопределение perform_create для создания пользователя"""
+        data = {
+            "name": serializer.validated_data["name"],
+            "phone": serializer.validated_data["phone"],
+            "email": serializer.validated_data["email"],
+            "password": serializer.validated_data["password"],
+        }
+        return CustomUser.objects.create_user(**data)
+
 
 def send_sms_view(request):
     return HttpResponse("Send SMS view placeholder")
