@@ -23,7 +23,6 @@ class CustomUser(AbstractUser):
         blank=False,
         null=False,
     )
-
     email = models.EmailField(
         "Почта",
         unique=True,
@@ -39,7 +38,7 @@ class CustomUser(AbstractUser):
         null=False,
         validators=[MinLengthValidator(10)],
     )
-    avatar = models.ImageField(
+    profile_image = models.ImageField(
         "Аватар пользователя",
         upload_to="users/avatars",
         blank=True,
@@ -59,7 +58,6 @@ class CustomUser(AbstractUser):
     date_joined = models.DateTimeField(
         auto_now_add=True,
     )
-
     is_phone_verified = models.BooleanField(
         "Проверка телефона",
         default=False,
