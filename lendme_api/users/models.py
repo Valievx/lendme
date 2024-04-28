@@ -40,7 +40,7 @@ class CustomUser(AbstractUser):
     )
     profile_image = models.ImageField(
         "Аватар пользователя",
-        upload_to="users/avatars",
+        upload_to="users/profile_image",
         blank=True,
         null=True,
     )
@@ -49,11 +49,6 @@ class CustomUser(AbstractUser):
         max_length=128,
         blank=False,
         null=False,
-    )
-    date_birthday = models.DateField(
-        "Дата рождения",
-        blank=True,
-        null=True,
     )
     date_joined = models.DateTimeField(
         auto_now_add=True,
