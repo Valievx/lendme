@@ -5,6 +5,5 @@ app_name = "lend_me"
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api/", include("api.urls")),
-    
+    path("api/user/", include("users.urls")),
 ]

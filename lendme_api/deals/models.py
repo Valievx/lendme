@@ -1,18 +1,21 @@
 from django.db import models
 
+from products.models import Deposite, Product
+from users.models import CustomUser
+
 
 class Deals(models.Model):
     """
     Модель сделок.
     """
     user = models.ForeignKey(
-        "CustomUser",
+        CustomUser,
         verbose_name="Сделка",
         on_delete=models.CASCADE,
         related_name="deals",
     )
     product = models.ForeignKey(
-        "Product",
+        Product,
         verbose_name="Продукт",
         on_delete=models.CASCADE,
         related_name="deals",
@@ -23,7 +26,7 @@ class Deals(models.Model):
     )
     deal_amount = models.IntegerField()
     confirm_deposite = models.ForeignKey(
-        "Deposite",
+        Deposite,
         verbose_name="Подтвержденный депозит",
         on_delete=models.CASCADE,
         related_name="deals",

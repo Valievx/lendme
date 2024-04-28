@@ -1,5 +1,7 @@
 from django.db import models
 
+from users.models import CustomUser
+
 
 class Product(models.Model):
     title = models.CharField(
@@ -28,7 +30,7 @@ class Product(models.Model):
     )
     image = models.ImageField(upload_to="products/image_products")
     author = models.ForeignKey(
-        "CustomUser",
+        CustomUser,
         verbose_name="Автор",
         related_name="products",
         on_delete=models.CASCADE,
@@ -52,11 +54,9 @@ class Address(models.Model):
     """
     Модель адрресов сдаваемой продукцией в аренду.
     """
-    address = ...
-    city = models.Choices(
-        choices=...,
-    )
-    metro = ...
+    address = models.CharField(max_length=255, default="Заглушка адреса")
+    city = models.CharField(max_length=100, default="Заглушка города")
+    metro = models.CharField(max_length=100, default="Заглушка метро")
 
     class Meta:
         ordering = ("city",)
