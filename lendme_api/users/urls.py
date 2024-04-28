@@ -5,8 +5,6 @@ from users.views import (login_view, register_view,
                          profile_view, profile_update_view,
                          reset_user_password_view, refresh_token_view)
 
-app_name = "user"
-
 urlpatterns = [
     # api/user/login/
     path("login/", login_view, name="login"),
