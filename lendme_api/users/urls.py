@@ -10,6 +10,5 @@ urlpatterns = [
     path("api/user/profile/", ..., name="profile"),
     path("api/user/profile/update/", ..., name="profile_update"),
     path("api/user/password/reset/", ..., name="reset_user_password"),
-    path("api/user/upload-image/", ..., name="upload_profile_image"),
     path("api/user/refresh-token/", ..., name="refresh_token"),
 ]
