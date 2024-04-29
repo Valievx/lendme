@@ -23,8 +23,8 @@ class CustomUser(AbstractUser):
         blank=False,
         null=False,
     )
-    phone = models.CharField(
-        "Телефон",
+    phone_number = models.CharField(
+        "Номер телефон",
         unique=True,
         max_length=10,
         blank=False,
@@ -65,7 +65,7 @@ class CustomUser(AbstractUser):
 
     objects = CustomUserManager()
 
-    USERNAME_FIELD = "phone"
+    USERNAME_FIELD = "phone_number"
     REQUIRED_FIELDS = []
 
     class Meta:

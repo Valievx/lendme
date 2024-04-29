@@ -9,7 +9,7 @@ class UserAdmin(admin.ModelAdmin):
         "id",
         "name",
         "email",
-        "phone",
+        "phone_number",
     )
     search_fields = ("email",)
     list_filter = ("email",)

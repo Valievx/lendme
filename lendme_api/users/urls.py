@@ -1,7 +1,7 @@
 from django.urls import path
 
 from users.views import (login_view, RegisterView,
-                         send_sms_view, confirm_phone_view,
+                         SmsCodeCreateView, confirm_phone_view,
                          profile_view, profile_update_view,
                          reset_user_password_view, refresh_token_view)
 
@@ -11,7 +11,7 @@ urlpatterns = [
     # api/user/register/
     path("register/", RegisterView.as_view(), name="register"),
     # api/user/send_sms/
-    path('send_sms/', send_sms_view, name='send_sms'),
+    path('send_sms/', SmsCodeCreateView.as_view(), name='send_sms'),
     # api/user/confirm_phone/
     path("confirm_phone/", confirm_phone_view, name="confirm_phone"),
     # api/user/profile/

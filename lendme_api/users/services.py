@@ -3,7 +3,7 @@ import random
 
 def generate_sms_code():
     """Функция генерации смс кодов."""
-    sms_code = random.randint(1000, 9999)
+    sms_code = random.randint(10000, 99999)
     return sms_code
 
 def send_sms_code(phone_number, confirmation_code):

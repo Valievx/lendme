@@ -13,7 +13,7 @@ class CustomUserManager(BaseUserManager):
     def create_user(
         self,
         name: str,
-        phone: int,
+        phone_number: int,
         email: str,
         password: str,
         **extra_fields,
@@ -26,7 +26,7 @@ class CustomUserManager(BaseUserManager):
         """
         user = self.model(
             name=name,
-            phone=phone,
+            phone_number=phone_number,
             email=email,
             password=password,
         )
@@ -38,7 +38,7 @@ class CustomUserManager(BaseUserManager):
     def create_superuser(
         self,
         name: str,
-        phone: int,
+        phone_number: int,
         email: str,
         password: str,
         **extra_fields,
@@ -57,7 +57,7 @@ class CustomUserManager(BaseUserManager):
         """
         user = self.create_user(
             name=name,
-            phone=phone,
+            phone_number=phone_number,
             email=email,
             password=password,
             **extra_fields,
