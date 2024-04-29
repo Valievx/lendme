@@ -13,7 +13,7 @@ class UserSerializer(serializers.ModelSerializer):
     необходимые для регистрации пользователя.
     """
 
-    def validate_name(self, value):
+    def validate_name(self, value)-> str:
         """Валидация на соответствие требованиям для name."""
         return value
 

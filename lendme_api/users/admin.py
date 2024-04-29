@@ -7,13 +7,12 @@ from .models import CustomUser, Favorite, Review
 class UserAdmin(admin.ModelAdmin):
     list_display = (
         "id",
-        "username",
         "name",
         "email",
         "phone",
     )
-    search_fields = ("username",)
-    list_filter = ("username",)
+    search_fields = ("email",)
+    list_filter = ("email",)
 
 
 @admin.register(Favorite)

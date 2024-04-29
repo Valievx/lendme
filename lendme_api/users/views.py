@@ -4,6 +4,8 @@ from rest_framework.generics import CreateAPIView
 
 from users.serializers import UserSerializer
 from users.models import CustomUser
+from users.services import generate_sms_code, send_sms_code
+
 
 def login_view(request):
     return HttpResponse("Login view placeholder")
@@ -13,7 +15,7 @@ class RegisterView(CreateAPIView):
     Регистрация
 
     Регистрация нового пользователя.
-    Требуемые данные: name, email, password and phone.
+    Требуемые данные: name, email, password, phone, confirmation_code.
     """
 
     serializer_class = UserSerializer

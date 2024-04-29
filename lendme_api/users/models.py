@@ -8,14 +8,7 @@ from .manager import CustomUserManager
 class CustomUser(AbstractUser):
     """Модель Пользователя."""
 
-    username = models.CharField(
-        "Никнейм",
-        unique=True,
-        max_length=50,
-        blank=False,
-        null=False,
-        default="username",
-    )
+    username = None
     name = models.CharField(
         "Имя пользователя",
         unique=False,
@@ -50,6 +43,11 @@ class CustomUser(AbstractUser):
         blank=False,
         null=False,
     )
+    confirmation_code = models.CharField(
+        "Код подтверждения",
+        max_length=5,
+        blank=True
+    )
     date_joined = models.DateTimeField(
         auto_now_add=True,
     )
@@ -67,20 +65,13 @@ class CustomUser(AbstractUser):
 
     objects = CustomUserManager()
 
-    USERNAME_FIELD = "username"
+    USERNAME_FIELD = "phone"
+    REQUIRED_FIELDS = []
 
     class Meta:
         verbose_name = "Пользователь"
         verbose_name_plural = "Пользователи"
         ordering = ("email",)
-
-    def save(self, *args, **kwargs):
-        if not self.pk:
-            if self.email:
-                self.username = self.email
-            elif self.phone:
-                self.username = self.phone
-        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"Почта - {self.email}, телефон - {self.phone} пользователя."
