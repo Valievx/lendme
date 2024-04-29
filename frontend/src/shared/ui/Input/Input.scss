@@ -45,7 +45,7 @@
   }
   &__label {
     @include use-font(14px, 16px, 400);
-    padding-left: 12px;
+    padding-left: 2px;
     color: $black;
     transform: translateY(-10px);
     &_error {
