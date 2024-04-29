@@ -18,6 +18,7 @@
       right: 16px;
     }
   }
+
   &__coral {
     @include use-font(18px, 24px, 400);
     padding: 10px 24px;
@@ -62,6 +63,15 @@
       background-color: $active-coral;
     }
   }
+
+  &__blue {
+    width: 100%;
+    @include use-font(16px, 20px, 400);
+    padding: 10px 24px;
+    background-color: $blue-btn;
+    letter-spacing: 0.15px;
+  }
+
   &__close {
     position: absolute;
     top: 0px;
