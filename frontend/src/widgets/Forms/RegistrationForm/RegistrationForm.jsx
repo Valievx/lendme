@@ -11,6 +11,7 @@ export const RegistrationForm = ({ onTitleClick, onClosePopup }) => {
 	const { form, errors, isFormValid, handleChange } = useFormAndValidation(
 		{
 			username: '',
+			phone: '',
 			email: '',
 			password: '',
 			confirmPass: '',
@@ -34,6 +35,17 @@ export const RegistrationForm = ({ onTitleClick, onClosePopup }) => {
 				inputLabelText="Ваше имя на сайте *"
 				onChange={handleChange}
 				inputError={errors.username}
+			/>
+
+			<Input
+				inputClass="input__form"
+				inputName="phone"
+				inputType="tel"
+				inputValue={form.phone}
+				placeholder="Ваш телефон"
+				inputLabelText="Номер телефона*"
+				onChange={handleChange}
+				inputError={errors.phone}
 			/>
 
 			<Input

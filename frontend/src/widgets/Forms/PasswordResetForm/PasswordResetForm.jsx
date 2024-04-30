@@ -8,12 +8,13 @@ import { Input } from '../../../shared/ui/Input/Input';
 import { Button } from '../../../shared/ui/Button/Button';
 
 export const PasswordResetForm = ({ onTitleClick, onClosePopup }) => {
-	const { form, errors, handleChange, isFormValid } = useFormAndValidation(
-		{
-			email: '',
-		},
-		validationSchemaAuthForms
-	);
+	const { form, errors, inputType, isFormValid, handleInputChangeEmail } =
+		useFormAndValidation(
+			{
+				emailOrPhone: '',
+			},
+			validationSchemaAuthForms
+		);
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
@@ -25,13 +26,14 @@ export const PasswordResetForm = ({ onTitleClick, onClosePopup }) => {
 		<InitialForm formClass="forms" onSubmit={handleSubmit}>
 			<Input
 				inputClass="input__form"
-				inputName="email"
-				inputValue={form.email}
+				inputName="emailOrPhone"
+				inputType={inputType}
+				inputValue={form.emailOrPhone}
 				placeholder="E-mail"
 				inputLabelText="E-mail*"
-				onChange={handleChange}
+				onChange={handleInputChangeEmail}
 				inputInfo="Введите ваш E-mail указанный при регистрации. Мы отправим на него временный пароль"
-				inputError={errors.email}
+				inputError={errors.emailOrPhone}
 			/>
 
 			<Button

@@ -11,7 +11,7 @@ export const RegisterSocialLinks = ({ data }) => {
 				{data.map((item) => (
 					<Button className="button__blue" key={item.id}>
 						<Icon className="svg-social_link" id={item?.iconId} />
-            {item.text &&  <span>{item.text}</span> }
+						{item.text && <span>{item.text}</span>}
 					</Button>
 				))}
 			</div>

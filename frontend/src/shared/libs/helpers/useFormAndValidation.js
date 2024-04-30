@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { EMAILREGEX } from '../../consts/constants';
 
 // кастомный хук валидации
 const useFormAndValidation = (initialState, validationSchema) => {
@@ -6,9 +7,7 @@ const useFormAndValidation = (initialState, validationSchema) => {
 	const [errors, setErrors] = useState({});
 	const [isFormValid, setIsFormValid] = useState(false);
 	const [isActiveInput, setIsActiveInput] = useState({});
-
-	// проверяет, есть ли значения в объекте
-	const hasValues = (val) => !Object.values(val).some((value) => value === '');
+	const [inputType, setInputType] = useState('email');
 
 	const handleFocus = (evt) => {
 		setIsActiveInput(evt.target);
@@ -40,10 +39,6 @@ const useFormAndValidation = (initialState, validationSchema) => {
 		setErrors(null);
 	};
 
-	const hardChangeIsFormValid = (boolean) => {
-		setIsFormValid(boolean);
-	};
-
 	const handleChange = (evt) => {
 		const input = evt.target;
 
@@ -69,6 +64,12 @@ const useFormAndValidation = (initialState, validationSchema) => {
 			});
 	};
 
+	const handleInputChangeEmail = (e) => {
+		const { value } = e.target;
+		setInputType(EMAILREGEX.test(value) ? 'email' : 'tel');
+		handleChange(e);
+	};
+
 	const handleSelectChange = (selectedObj) => {
 		setForm((prevState) => ({
 			...prevState,
@@ -77,18 +78,22 @@ const useFormAndValidation = (initialState, validationSchema) => {
 	};
 
 	useEffect(() => {
-		setIsFormValid(hasValues(form));
-	}, [form]);
+		const isValid =
+			Object.values(form).every((value) => value !== '') &&
+			!Object.values(errors).some((value) => value !== '');
+		setIsFormValid(isValid);
+	}, [form, errors]);
 
 	return {
 		form,
 		setForm,
 		errors,
 		isFormValid,
+		inputType,
 		handleChange,
+		handleInputChangeEmail,
 		handleSelectChange,
 		resetForm,
-		hardChangeIsFormValid,
 		handleFocus,
 		handleBlur,
 		updateFormInput,

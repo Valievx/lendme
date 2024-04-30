@@ -6,9 +6,16 @@ import useFormAndValidation from '../../../shared/libs/helpers/useFormAndValidat
 import { validationSchemaAuthForms } from '../../../shared/consts/validationSchemas';
 
 export const LoginForms = ({ onTitleClick, onClosePopup }) => {
-	const { form, errors, isFormValid, handleChange } = useFormAndValidation(
+	const {
+		form,
+		errors,
+		inputType,
+		isFormValid,
+		handleChange,
+		handleInputChangeEmail,
+	} = useFormAndValidation(
 		{
-			email: '',
+			emailOrPhone: '',
 			password: '',
 		},
 		validationSchemaAuthForms
@@ -24,12 +31,13 @@ export const LoginForms = ({ onTitleClick, onClosePopup }) => {
 		<InitialForm formClass="forms" onSubmit={handleSubmit}>
 			<Input
 				inputClass="input__form"
-				inputName="email"
-				inputValue={form.email}
-				placeholder="E-mail"
-				inputLabelText="E-mail*"
-				onChange={handleChange}
-				inputError={errors.email}
+				inputName="emailOrPhone"
+				inputValue={form.emailOrPhone}
+				inputType={inputType}
+				placeholder="Телефон или адрес электронной почты"
+				inputLabelText="Телефон или E-mail*"
+				onChange={handleInputChangeEmail}
+				inputError={errors.emailOrPhone}
 			/>
 			<Input
 				inputClass="input__form"

@@ -1,19 +1,39 @@
 import * as Yup from 'yup';
-import {MINLENGTHNAME, MINLENGTPASSWORD, NAMEREGEX, PHONEREGEX, validationMessages } from './constants';
+import {
+	MINLENGTHNAME,
+	MINLENGTPASSWORD,
+	NAMEREGEX,
+	PHONEREGEX,
+	validationMessages,
+} from './constants';
 
 const validationSchemaAuthForms = Yup.object().shape({
 	username: Yup.string()
 		.min(MINLENGTHNAME, validationMessages.name_min)
-		.matches(NAMEREGEX, validationMessages.name) 
+		.matches(NAMEREGEX, validationMessages.name)
 		.required(validationMessages.required),
-    phone: Yup.string()
+	phone: Yup.string()
 		.trim()
-    .matches(PHONEREGEX, validationMessages.phone)
+		.matches(PHONEREGEX, validationMessages.phone)
 		.required(validationMessages.required),
 	email: Yup.string()
 		.trim()
 		.email(validationMessages.email)
 		.required(validationMessages.required),
+
+	emailOrPhone: Yup.string()
+		.required(validationMessages.required)
+		.test('is-email-or-phone', validationMessages.emailOrPhone, (value) => {
+			if (!value) return false;
+
+			if (Yup.string().email().isValidSync(value)) return true;
+
+			if (PHONEREGEX.test(value)) return true;
+
+			return false;
+		})
+		.trim(),
+
 	password: Yup.string()
 		.min(MINLENGTPASSWORD, validationMessages.current_password)
 		.required(validationMessages.required),
