@@ -2,6 +2,8 @@ import re
 
 from django.contrib.auth.password_validation import validate_password
 from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
 
@@ -16,7 +18,13 @@ class UserSerializer(serializers.ModelSerializer):
     """
 
     def validate_name(self, value)-> str:
-        """Валидация на соответствие требованиям для name."""
+        """Валидация на соответствие имени всем требованиям."""
+
+        if not value.isalpha():
+            raise ValidationError(_("Имя может содержать только буквы."))
+
+        if len(value) < 2 or len(value) > 50:
+            raise ValidationError(_("Имя должно содержать от 2 до 50 символов."))
         return value
 
     def validate_phone_number(self, value: str) -> str:
@@ -57,11 +65,6 @@ class PhoneSmsSerializer(serializers.Serializer):
     @staticmethod
     def validate_phone_number(value):
         """Метод валидации номера телефона."""
-        pattern = r'\+7\d{10}$'
-        if not re.match(pattern, value):
-            raise serializers.ValidationError(
-                "Номер телефона должен начинаться с +7 и иметь 11 цифр"
-            )
         return value
 
     @staticmethod

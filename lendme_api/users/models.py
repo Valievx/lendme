@@ -12,7 +12,7 @@ class CustomUser(AbstractUser):
     name = models.CharField(
         "Имя пользователя",
         unique=False,
-        max_length=70,
+        max_length=50,
         blank=False,
         null=False,
     )
