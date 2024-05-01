@@ -6,17 +6,74 @@ from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
-from rest_framework_simplejwt.tokens import AccessToken
+from rest_framework_simplejwt.settings import api_settings
 
 from django.shortcuts import get_object_or_404
+from django.utils import timezone
+from django.http import JsonResponse
+from django.utils.translation import gettext_lazy as _
 
-from users.serializers import UserSerializer, PhoneSmsSerializer
-from users.models import CustomUser
+from users.utils import get_client_ip, get_location_by_ip
+from users.models import CustomUser, AuthTransaction
 from users.services import generate_sms_code, send_sms_code
+from users.serializers import (UserSerializer, PhoneSmsSerializer,
+                               CustomTokenObtainPairSerializer)
 
 
-def login_view(request):
-    return HttpResponse("Login view placeholder")
+class LoginView(APIView):
+    """
+    Авторизация
+
+    Используется для входа в систему.
+    Требуемые данные: phone_number или email и password.
+    """
+
+    renderer_classes = (JSONRenderer,)
+    permission_classes = (AllowAny,)
+    serializer_class = CustomTokenObtainPairSerializer
+
+    def post(self, request):
+        """
+        Метод обрабатывает POST запрос для входа
+        через phone_number or email/password.
+        """
+        serializer = self.serializer_class(data=request.data)
+
+        serializer.is_valid(raise_exception=True)
+
+        user = serializer.user
+
+        if not user.is_phone_verified:
+            return JsonResponse(
+                {'error': _('Номер телефона не подтвержден.')},
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        token = serializer.validated_data.get("access")
+        refresh_token = serializer.validated_data.get("refresh")
+
+        ip_address = get_client_ip(request)
+        geo_location = get_location_by_ip(ip_address)
+        city = geo_location.get("city") if geo_location else None
+
+        AuthTransaction(
+            created_by=user,
+            token=str(token),
+            refresh_token=str(refresh_token),
+            ip_address=get_client_ip(self.request),
+            session=user.get_session_auth_hash(),
+            expires_at=timezone.now() + api_settings.ACCESS_TOKEN_LIFETIME,
+            city=city
+        ).save()
+
+        response  = {
+            "refresh_token": str(refresh_token),
+            "token": str(token),
+            "session": user.get_session_auth_hash(),
+            "city": city
+        }
+        return Response(response , status=status.HTTP_200_OK)
+
 
 class RegisterView(CreateAPIView):
     """
@@ -100,10 +157,8 @@ class SmsCodeVerificationView(APIView):
         if sms_code == user.confirmation_code:
             user.is_phone_verified = True
             user.save()
-            access_token = str(AccessToken.for_user(user))
             return Response(
-                {'message': 'Номер телефона успешно подтвержден',
-                'access_token': access_token},
+                {'message': 'Номер телефона успешно подтвержден'},
                 status=status.HTTP_200_OK
             )
         else:
