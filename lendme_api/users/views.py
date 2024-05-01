@@ -1,5 +1,3 @@
-from django.http import HttpResponse
-
 from rest_framework.generics import CreateAPIView
 from rest_framework import status
 from rest_framework.views import APIView
@@ -7,6 +5,9 @@ from rest_framework.permissions import AllowAny
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework_simplejwt.settings import api_settings
+from rest_framework_simplejwt.views import TokenRefreshView
+from rest_framework_simplejwt.exceptions import TokenError
+from rest_framework_simplejwt.exceptions import InvalidToken
 
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
@@ -17,7 +18,8 @@ from users.utils import get_client_ip, get_location_by_ip
 from users.models import CustomUser, AuthTransaction
 from users.services import generate_sms_code, send_sms_code
 from users.serializers import (UserSerializer, PhoneSmsSerializer,
-                               CustomTokenObtainPairSerializer)
+                               CustomTokenObtainPairSerializer,
+                               PasswordResetSerializer)
 
 
 class LoginView(APIView):
@@ -167,14 +169,55 @@ class SmsCodeVerificationView(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-def profile_view(request):
-    return HttpResponse("Profile view placeholder")
 
-def profile_update_view(request):
-    return HttpResponse("Profile update view placeholder")
+class CustomTokenRefreshView(TokenRefreshView):
+    """
+    Подкласс TokenRefreshView для обновления модели
+    AuthTransaction при обновлении токена доступа
+    """
 
-def reset_user_password_view(request):
-    return HttpResponse("Reset user password view placeholder")
+    def post(self, request):
+        """
+        Запрос на создание access token,
+        используя refresh token.
+        """
+        serializer = self.get_serializer(data=request.data)
 
-def refresh_token_view(request):
-    return HttpResponse("Refresh token view placeholder")
+        try:
+            serializer.is_valid(raise_exception=True)
+        except TokenError as e:
+            raise InvalidToken(e.args[0])
+
+        token = serializer.validated_data.get("access")
+
+        auth_transaction = AuthTransaction.objects.get(
+            refresh_token=request.data["refresh"]
+        )
+        auth_transaction.token = token
+        auth_transaction.expires_at = (
+            timezone.now() + api_settings.ACCESS_TOKEN_LIFETIME
+        )
+        auth_transaction.save(update_fields=["token", "expires_at"])
+
+        return Response({"token": str(token)}, status=status.HTTP_200_OK)
+
+
+class PasswordResetView(APIView):
+    """Сброс пароля"""
+
+    permission_classes = (AllowAny,)
+
+    def post(self, request):
+        """Метод сброса пароля"""
+        serializer = PasswordResetSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        user = CustomUser.objects.get(email=serializer.validated_data["email"])
+
+        if serializer.validated_data["email"]:
+            user.set_password(serializer.validated_data["password"])
+            user.save()
+            return JsonResponse(
+                {"message": "Пароль успешно обновлен."},
+                status=status.HTTP_202_ACCEPTED,
+            )
