@@ -23,7 +23,32 @@ from users.serializers import (UserSerializer, PhoneSmsSerializer,
                                CustomTokenObtainPairSerializer,
                                PasswordResetSerializer)
 
+from drf_spectacular.utils import (
+    # OpenApiParameter,
+    extend_schema,
+    extend_schema_view,
+)
 
+
+@extend_schema(
+    tags=["Организация"],
+    methods=["GET", "POST", "DELETE"],
+    description="Все пользователи",
+)
+@extend_schema_view(
+    list=extend_schema(
+        summary="Получить список организаций",
+    ),
+    retrieve=extend_schema(
+        summary="Детальная информация об организации",
+    ),
+    create=extend_schema(
+        summary="Создание организации",
+    ),
+    destroy=extend_schema(
+        summary="Удаление организации",
+    ),
+)
 class LoginView(APIView):
     """
     Авторизация
@@ -41,9 +66,11 @@ class LoginView(APIView):
         Метод обрабатывает POST запрос для входа
         через phone_number or email/password.
         """
+        print(request.data)
         serializer = self.serializer_class(data=request.data)
-
+        print(serializer)
         serializer.is_valid(raise_exception=True)
+
 
         user = serializer.user
 

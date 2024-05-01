@@ -60,7 +60,7 @@ class UserSerializer(serializers.ModelSerializer):
 class PhoneSmsSerializer(serializers.Serializer):
     """Сериализатор для номера телефона и смс кода."""
 
-    phone_number = serializers.CharField(max_length=12)
+    phone_number = serializers.CharField(max_length=10)
     sms_code = serializers.IntegerField(required=False)
 
     @staticmethod
