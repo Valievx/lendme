@@ -1,10 +1,12 @@
 from django.contrib.auth.password_validation import validate_password
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
+from django.core.validators import EmailValidator
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework.exceptions import NotFound
 
 from users.models import CustomUser
 
@@ -103,3 +105,31 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
             token["name"] = user.name
 
         return token
+
+
+class PasswordResetSerializer(serializers.Serializer):
+    """Сериализатор для сброса пароля."""
+
+    email = serializers.EmailField(required=True)
+    password = serializers.CharField(required=True)
+
+    def get_user(self, destination: str) -> CustomUser:
+
+        try:
+            user = CustomUser.objects.get(email=destination)
+        except CustomUser.DoesNotExist:
+            user = None
+        return user
+
+    def validate(self, attrs: dict) -> dict:
+        """Проверяет, существует ли пользователь с
+        предоставленной электронной почтой.
+        """
+        validator = EmailValidator()
+        validator(attrs.get("email"))
+        user = self.get_user(attrs.get("email"))
+
+        if not user:
+            raise NotFound(_("Пользователь с указанным адресом электронной почты не существует."))
+
+        return attrs
