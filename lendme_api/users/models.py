@@ -77,6 +77,54 @@ class CustomUser(AbstractUser):
         return f"Почта - {self.email}, телефон - {self.phone} пользователя."
 
 
+class AuthTransaction(models.Model):
+    """Модель мета данных Аутентификации."""
+    ip_address = models.GenericIPAddressField(
+        blank=False,
+        null=False
+    )
+    city = models.CharField(
+        "Город",
+        max_length=100,
+        blank=True,
+        null=True
+    )
+    token = models.TextField(
+        "JWT Access Token"
+    )
+    session = models.TextField(
+        "Session"
+    )
+    refresh_token = models.TextField(
+        "JWT Refresh Token",
+        blank=True,
+    )
+    expires_at = models.DateTimeField(
+        "Дата окончания",
+        blank=True,
+        null=True
+    )
+    create_date = models.DateTimeField(
+        "Дата создания",
+        auto_now_add=True
+    )
+    update_date = models.DateTimeField(
+        "Дата обновления",
+        auto_now=True
+    )
+    created_by = models.ForeignKey(
+        to=CustomUser,
+        on_delete=models.PROTECT
+    )
+
+    def __str__(self):
+        return str(self.created_by.name) + " | " + str(self.created_by.username)
+
+    class Meta:
+        verbose_name = "Транзакция аутентификации"
+        verbose_name_plural = "Транзакции аутентификаций"
+
+
 class Favorite(models.Model):
     user = models.ForeignKey(
         "CustomUser",

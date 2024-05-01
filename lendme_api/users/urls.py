@@ -1,13 +1,13 @@
 from django.urls import path
 
-from users.views import (login_view, RegisterView,
+from users.views import (LoginView, RegisterView,
                          SmsCodeCreateView, SmsCodeVerificationView,
                          profile_view, profile_update_view,
                          reset_user_password_view, refresh_token_view)
 
 urlpatterns = [
     # api/user/login/
-    path("login/", login_view, name="login"),
+    path("login/", LoginView.as_view(), name="login"),
     # api/user/register/
     path("register/", RegisterView.as_view(), name="register"),
     # api/user/send_sms/
