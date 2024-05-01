@@ -19,9 +19,12 @@ from django.middleware.csrf import get_token
 from users.utils import get_client_ip, get_location_by_ip
 from users.models import CustomUser, AuthTransaction
 from users.services import generate_sms_code, send_sms_code
-from users.serializers import (UserSerializer, PhoneSmsSerializer,
-                               CustomTokenObtainPairSerializer,
-                               PasswordResetSerializer)
+from users.serializers import (
+    UserSerializer,
+    PhoneSmsSerializer,
+    CustomTokenObtainPairSerializer,
+    PasswordResetSerializer,
+)
 
 from drf_spectacular.utils import (
     # OpenApiParameter,
@@ -31,22 +34,12 @@ from drf_spectacular.utils import (
 
 
 @extend_schema(
-    tags=["Организация"],
-    methods=["GET", "POST", "DELETE"],
-    description="Все пользователи",
+    tags=["Пользователи"],
+    methods=["POST"],
 )
 @extend_schema_view(
-    list=extend_schema(
-        summary="Получить список организаций",
-    ),
-    retrieve=extend_schema(
-        summary="Детальная информация об организации",
-    ),
-    create=extend_schema(
-        summary="Создание организации",
-    ),
-    destroy=extend_schema(
-        summary="Удаление организации",
+    post=extend_schema(
+        summary="Авторизация пользователя",
     ),
 )
 class LoginView(APIView):
@@ -66,18 +59,15 @@ class LoginView(APIView):
         Метод обрабатывает POST запрос для входа
         через phone_number or email/password.
         """
-        print(request.data)
         serializer = self.serializer_class(data=request.data)
-        print(serializer)
         serializer.is_valid(raise_exception=True)
-
 
         user = serializer.user
 
         if not user.is_phone_verified:
             return JsonResponse(
-                {'error': _('Номер телефона не подтвержден.')},
-                status=status.HTTP_403_FORBIDDEN
+                {"error": _("Номер телефона не подтвержден.")},
+                status=status.HTTP_403_FORBIDDEN,
             )
 
         token = serializer.validated_data.get("access")
@@ -94,33 +84,42 @@ class LoginView(APIView):
             ip_address=get_client_ip(self.request),
             session=user.get_session_auth_hash(),
             expires_at=timezone.now() + api_settings.ACCESS_TOKEN_LIFETIME,
-            city=city
+            city=city,
         ).save()
 
-        response = Response({
-            "refresh_token": str(refresh_token),
-            "token": str(token),
-            "session": user.get_session_auth_hash(),
-        }, status=status.HTTP_200_OK)
+        response = Response(
+            {
+                "refresh_token": str(refresh_token),
+                "token": str(token),
+                "session": user.get_session_auth_hash(),
+            },
+            status=status.HTTP_200_OK,
+        )
         response.set_cookie(
             key=settings.SIMPLE_JWT["TOKEN_COOKIE_NAME"],
             value=token,
             httponly=True,
             secure=True,
-            samesite="Strict"
+            samesite="Strict",
         )
 
         csrf_token = get_token(request)
         response.set_cookie(
-            key="csrftoken",
-            value=csrf_token,
-            secure=True,
-            samesite="Strict"
+            key="csrftoken", value=csrf_token, secure=True, samesite="Strict"
         )
 
         return response
 
 
+@extend_schema(
+    tags=["Пользователи"],
+    methods=["POST"],
+)
+@extend_schema_view(
+    post=extend_schema(
+        summary="Создание пользователя",
+    ),
+)
 class RegisterView(CreateAPIView):
     """
     Регистрация
@@ -133,7 +132,6 @@ class RegisterView(CreateAPIView):
     permission_classes = (AllowAny,)
     serializer_class = UserSerializer
 
-
     def perform_create(self, serializer):
         """Переопределение perform_create для создания пользователя"""
         data = {
@@ -145,6 +143,15 @@ class RegisterView(CreateAPIView):
         return CustomUser.objects.create_user(**data)
 
 
+@extend_schema(
+    tags=["Пользователи"],
+    methods=["POST"],
+)
+@extend_schema_view(
+    post=extend_schema(
+        summary="Отправка смс кода",
+    ),
+)
 class SmsCodeCreateView(APIView):
     """
     Создание SMS кода
@@ -152,12 +159,12 @@ class SmsCodeCreateView(APIView):
     """
 
     permission_classes = (AllowAny,)
-
+    serializer_class = PhoneSmsSerializer
 
     def post(self, request):
         """Метод обрабатывает POST запрос для отправки смс кода."""
-        phone_number = request.data.get('phone_number')
-        serializer = PhoneSmsSerializer(data={'phone_number': phone_number})
+        phone_number = request.data.get("phone_number")
+        serializer = PhoneSmsSerializer(data={"phone_number": phone_number})
         if serializer.is_valid():
             try:
                 sms_code = generate_sms_code()
@@ -168,23 +175,34 @@ class SmsCodeCreateView(APIView):
                 user.save()
 
                 return Response(
-                    {'message': 'Смс код отправлен успешно',
-                     'Никому не говорите код LendMe': sms_code},
-                    status=status.HTTP_200_OK
+                    {
+                        "message": "Смс код отправлен успешно",
+                        "Никому не говорите код LendMe": sms_code,
+                    },
+                    status=status.HTTP_200_OK,
                 )
             except CustomUser.DoesNotExist:
                 return Response(
-                    {'message': 'Пользователь с указанным номером телефона не найден'},
-                    status=status.HTTP_404_NOT_FOUND
+                    {"message": "Пользователь с указанным номером телефона не найден"},
+                    status=status.HTTP_404_NOT_FOUND,
                 )
             except Exception as e:
                 return Response(
-                    {'message': f'Ошибка отправки смс кода: {e}'},
-                    status=status.HTTP_400_BAD_REQUEST
+                    {"message": f"Ошибка отправки смс кода: {e}"},
+                    status=status.HTTP_400_BAD_REQUEST,
                 )
         return Response(serializer.errors, status=400)
 
 
+@extend_schema(
+    tags=["Пользователи"],
+    methods=["POST"],
+)
+@extend_schema_view(
+    post=extend_schema(
+        summary="Верификация Пользователя",
+    ),
+)
 class SmsCodeVerificationView(APIView):
     """
     Проверка SMS кода
@@ -192,28 +210,40 @@ class SmsCodeVerificationView(APIView):
     Проверка смс кода на подтверждение номера телефона.
     Требуемые данные: phone_number, sms_code.
     """
+
     permission_classes = (AllowAny,)
+    serializer_class = PhoneSmsSerializer
 
     def post(self, request):
         """Метод обрабатывает POST запрос для проверки смс кода."""
-        phone_number = request.data.get('phone_number')
-        sms_code = request.data.get('sms_code')
+        print(request.data)
+        phone_number = request.data.get("phone_number")
+        sms_code = request.data.get("sms_code")
         user = get_object_or_404(CustomUser, phone_number=phone_number)
+        print(user.confirmation_code)
 
         if sms_code == user.confirmation_code:
             user.is_phone_verified = True
             user.save()
             return Response(
-                {'message': 'Номер телефона успешно подтвержден'},
-                status=status.HTTP_200_OK
+                {"message": "Номер телефона успешно подтвержден"},
+                status=status.HTTP_200_OK,
             )
         else:
             return Response(
-                {'message': 'Неправильный смс код'},
-                status=status.HTTP_400_BAD_REQUEST
+                {"message": "Неправильный смс код"}, status=status.HTTP_400_BAD_REQUEST
             )
 
 
+@extend_schema(
+    tags=["Пользователи"],
+    methods=["POST"],
+)
+@extend_schema_view(
+    post=extend_schema(
+        summary="Обновление токена",
+    ),
+)
 class CustomTokenRefreshView(TokenRefreshView):
     """
     Подкласс TokenRefreshView для обновления модели
@@ -249,20 +279,26 @@ class CustomTokenRefreshView(TokenRefreshView):
             value=token,
             httponly=True,
             secure=True,
-            samesite="Strict"
+            samesite="Strict",
         )
 
         csrf_token = get_token(request)
         response.set_cookie(
-            key="csrftoken",
-            value=csrf_token,
-            secure=True,
-            samesite="Strict"
+            key="csrftoken", value=csrf_token, secure=True, samesite="Strict"
         )
 
         return response
 
 
+@extend_schema(
+    tags=["Пользователи"],
+    methods=["POST"],
+)
+@extend_schema_view(
+    post=extend_schema(
+        summary="Смена пароля",
+    ),
+)
 class PasswordResetView(APIView):
     """Сброс пароля"""
 

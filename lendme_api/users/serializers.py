@@ -11,7 +11,6 @@ from rest_framework.exceptions import NotFound
 from users.models import CustomUser
 
 
-
 class UserSerializer(serializers.ModelSerializer):
     """
     Сериализатор, который включает в себя атрибуты,

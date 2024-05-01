@@ -74,7 +74,7 @@ class CustomUser(AbstractUser):
         ordering = ("email",)
 
     def __str__(self):
-        return f"Почта - {self.email}, телефон - {self.phone} пользователя."
+        return f"Почта - {self.email}, телефон - {self.phone_number} пользователя."
 
 
 class AuthTransaction(models.Model):
