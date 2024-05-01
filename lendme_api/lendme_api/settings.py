@@ -179,8 +179,8 @@ SOCIAL_AUTH_PIPELINE = (
 )
 
 SPECTACULAR_SETTINGS = {
-    "TITLE": "Coffee_guide",
-    "DESCRIPTION": "Coffee Guide for human",
+    "TITLE": "LendMe API",
+    "DESCRIPTION": "Find what you need",
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
     "SWAGGER_UI_DIST": "SIDECAR",  # shorthand to use the sidecar instead
