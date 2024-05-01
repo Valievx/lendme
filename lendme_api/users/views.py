@@ -64,11 +64,11 @@ class LoginView(APIView):
 
         user = serializer.user
 
-        if not user.is_phone_verified:
-            return JsonResponse(
-                {"error": _("Номер телефона не подтвержден.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
+        # if not user.is_phone_verified:
+        #     return JsonResponse(
+        #         {"error": _("Номер телефона не подтвержден.")},
+        #         status=status.HTTP_403_FORBIDDEN,
+        #     )
 
         token = serializer.validated_data.get("access")
         refresh_token = serializer.validated_data.get("refresh")

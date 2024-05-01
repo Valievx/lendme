@@ -161,11 +161,11 @@ TOKEN_MODEL = "users.CustomUser"
 # SOCIAL_AUTH_URL_NAMESPACE = 'social'
 
 
-# AUTHENTICATION_BACKENDS = (
-#     "social_core.backends.vk.VKOAuth2",
-#     "social_core.backends.github.GithubOAuth2",
-#     'users.backends.AuthBackend'
-# )
+AUTHENTICATION_BACKENDS = (
+    "social_core.backends.vk.VKOAuth2",
+    "social_core.backends.github.GithubOAuth2",
+    'users.backends.AuthBackend'
+)
 
 SOCIAL_AUTH_PIPELINE = (
     "social_core.pipeline.social_auth.social_details",
