@@ -13,6 +13,8 @@ from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.http import JsonResponse
 from django.utils.translation import gettext_lazy as _
+from django.conf import settings
+from django.middleware.csrf import get_token
 
 from users.utils import get_client_ip, get_location_by_ip
 from users.models import CustomUser, AuthTransaction
@@ -68,13 +70,28 @@ class LoginView(APIView):
             city=city
         ).save()
 
-        response  = {
+        response = Response({
             "refresh_token": str(refresh_token),
             "token": str(token),
             "session": user.get_session_auth_hash(),
-            "city": city
-        }
-        return Response(response , status=status.HTTP_200_OK)
+        }, status=status.HTTP_200_OK)
+        response.set_cookie(
+            key=settings.SIMPLE_JWT["TOKEN_COOKIE_NAME"],
+            value=token,
+            httponly=True,
+            secure=True,
+            samesite="Strict"
+        )
+
+        csrf_token = get_token(request)
+        response.set_cookie(
+            key="csrftoken",
+            value=csrf_token,
+            secure=True,
+            samesite="Strict"
+        )
+
+        return response
 
 
 class RegisterView(CreateAPIView):
@@ -199,7 +216,24 @@ class CustomTokenRefreshView(TokenRefreshView):
         )
         auth_transaction.save(update_fields=["token", "expires_at"])
 
-        return Response({"token": str(token)}, status=status.HTTP_200_OK)
+        response = Response({"token": str(token)}, status=status.HTTP_200_OK)
+        response.set_cookie(
+            key=settings.SIMPLE_JWT["TOKEN_COOKIE_NAME"],
+            value=token,
+            httponly=True,
+            secure=True,
+            samesite="Strict"
+        )
+
+        csrf_token = get_token(request)
+        response.set_cookie(
+            key="csrftoken",
+            value=csrf_token,
+            secure=True,
+            samesite="Strict"
+        )
+
+        return response
 
 
 class PasswordResetView(APIView):
