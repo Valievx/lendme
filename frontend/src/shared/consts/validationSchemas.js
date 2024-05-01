@@ -2,9 +2,11 @@ import * as Yup from 'yup';
 import {
 	MINLENGTHNAME,
 	MINLENGTPASSWORD,
+	MAX_LENGT_CONFIRM_CODE,
 	NAMEREGEX,
 	PHONEREGEX,
 	validationMessages,
+	CODEREGEX,
 } from './constants';
 
 const validationSchemaAuthForms = Yup.object().shape({
@@ -40,7 +42,10 @@ const validationSchemaAuthForms = Yup.object().shape({
 	confirmPass: Yup.string()
 		.oneOf([Yup.ref('password'), null], validationMessages.re_password) // проверка на совпадение с паролем
 		.required(validationMessages.required),
-	confirmСode: Yup.string().required(validationMessages.required),
+	confirmСode: Yup.string()
+		.max(MAX_LENGT_CONFIRM_CODE, validationMessages.confirmation_code_max)
+		.matches(CODEREGEX, validationMessages.confirmation_code)
+		.required(validationMessages.required),
 });
 
 const validationSchemaSearch = Yup.object().shape({

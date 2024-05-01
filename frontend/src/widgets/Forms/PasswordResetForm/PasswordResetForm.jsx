@@ -30,8 +30,8 @@ export const PasswordResetForm = ({ onTitleClick, onClosePopup }) => {
 					inputName="emailOrPhone"
 					inputType={inputType}
 					inputValue={form.emailOrPhone}
-					placeholder="E-mail"
-					inputLabelText="E-mail*"
+					placeholder="Телефон или адрес электронной почты"
+					inputLabelText="Телефон или E-mail*"
 					onChange={handleInputChangeEmail}
 					inputInfo="Введите ваш E-mail указанный при регистрации. Мы отправим на него временный пароль"
 					inputError={errors.emailOrPhone}

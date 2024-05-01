@@ -12,7 +12,7 @@ import { formTitles } from '../../../shared/consts/constants';
 
 export const GeneralForm = (props) => {
 	const { isOpenPopup, onClosePopup } = props;
-	const [activeIndex, setActiveIndex] = useState(3);
+	const [activeIndex, setActiveIndex] = useState(0);
 
 	const handleTitleClick = (index) => {
 		setActiveIndex(index);
