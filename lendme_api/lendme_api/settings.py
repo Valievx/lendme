@@ -35,9 +35,12 @@ INSTALLED_APPS = [
 
     "djoser",
     "social_django",
-    'corsheaders',
-    'rest_framework',
-    'rest_framework.authtoken',
+    "drf_spectacular",
+    "drf_spectacular_sidecar",
+    "corsheaders",
+    "rest_framework",
+    "rest_framework.authtoken",
+    "phonenumber_field",
 ]
 
 MIDDLEWARE = [
@@ -122,6 +125,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
 SIMPLE_JWT = {
@@ -157,18 +161,12 @@ TOKEN_MODEL = "users.CustomUser"
 # SOCIAL_AUTH_USER_MODEL = "users.CustomUser"
 # SOCIAL_AUTH_URL_NAMESPACE = 'social'
 
-# Подключить REST Framework после появления базовых API.
-# REST_FRAMEWORK = {
-#     "DEFAULT_PERMISSION_CLASSES": [
-#         "rest_framework.permissions.AllowAny",
-#     ],
-#     "DEFAULT_AUTHENTICATION_CLASSES": [
-#         "rest_framework.authentication.TokenAuthentication"
-#     ],
-#     # "SEARCH_PARAM": "name",
-#     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
-# }
 
+AUTHENTICATION_BACKENDS = (
+    "social_core.backends.vk.VKOAuth2",
+    "social_core.backends.github.GithubOAuth2",
+    'users.backends.AuthBackend'
+)
 
 SOCIAL_AUTH_PIPELINE = (
     "social_core.pipeline.social_auth.social_details",
@@ -181,6 +179,15 @@ SOCIAL_AUTH_PIPELINE = (
     "social_core.pipeline.user.user_details",
 )
 
+SPECTACULAR_SETTINGS = {
+    "TITLE": "LendMe API",
+    "DESCRIPTION": "Find what you need",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+    "SWAGGER_UI_DIST": "SIDECAR",  # shorthand to use the sidecar instead
+    "SWAGGER_UI_FAVICON_HREF": "SIDECAR",
+    "REDOC_DIST": "SIDECAR",
+}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/

@@ -11,7 +11,6 @@ from rest_framework.exceptions import NotFound
 from users.models import CustomUser
 
 
-
 class UserSerializer(serializers.ModelSerializer):
     """
     Сериализатор, который включает в себя атрибуты,
@@ -49,9 +48,7 @@ class UserSerializer(serializers.ModelSerializer):
             "name",
             "email",
             "phone_number",
-            "password",
-            "is_superuser",
-            "is_staff"
+            "password"
         )
         read_only_fields = ("is_superuser", "is_staff")
         extra_kwargs = {"password": {"write_only": True}}
@@ -99,7 +96,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
             token["email"] = user.email
 
         if hasattr(user, "phone_number"):
-            token["phone_number"] = user.phone_number
+            token["phone_number"] = str(user.phone_number)
 
         if hasattr(user, "name"):
             token["name"] = user.name

@@ -9,4 +9,4 @@ def generate_sms_code():
 def send_sms_code(phone_number, confirmation_code):
     """Отправка СМС. Иммитация."""
     message = f'Код авторизации: {confirmation_code}'
-    print(message)
+    # print(message)

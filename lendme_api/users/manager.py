@@ -19,7 +19,7 @@ class CustomUserManager(BaseUserManager):
         **extra_fields,
     ):
         extra_fields.setdefault("is_superuser", False)
-        extra_fields.setdefault("is_active", True)
+        extra_fields.setdefault("is_active", False)
 
         """
         Создает и сохраняет пользователя с заданными данными.
@@ -31,7 +31,7 @@ class CustomUserManager(BaseUserManager):
             password=password,
         )
         user.set_password(password)
-        user.is_active = True
+        # user.is_active = True
         user.save(using=self._db)
         return user
 

@@ -1,3 +1,5 @@
+from phonenumber_field.modelfields import PhoneNumberField
+
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinLengthValidator
 from django.db import models
@@ -23,13 +25,14 @@ class CustomUser(AbstractUser):
         blank=False,
         null=False,
     )
-    phone_number = models.CharField(
+    phone_number = PhoneNumberField(
         "Номер телефон",
+        region='RU',
         unique=True,
-        max_length=10,
+        max_length=12,
         blank=False,
         null=False,
-        validators=[MinLengthValidator(10)],
+        validators=[MinLengthValidator(12)],
     )
     profile_image = models.ImageField(
         "Аватар пользователя",
@@ -55,11 +58,11 @@ class CustomUser(AbstractUser):
         "Проверка телефона",
         default=False,
     )
-    is_active = models.BooleanField(default=True)
-    is_verified = models.BooleanField(
-        "Проверка верификации",
+    is_email_verified = models.BooleanField(
+        "Проверка email",
         default=False,
     )
+    is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
 
@@ -74,7 +77,7 @@ class CustomUser(AbstractUser):
         ordering = ("email",)
 
     def __str__(self):
-        return f"Почта - {self.email}, телефон - {self.phone} пользователя."
+        return f"Почта - {self.email}, телефон - {self.phone_number} пользователя."
 
 
 class AuthTransaction(models.Model):
