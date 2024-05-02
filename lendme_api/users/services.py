@@ -4,6 +4,8 @@ import random
 import os
 from dotenv import load_dotenv
 
+from django.core.cache import cache
+
 load_dotenv()
 
 
@@ -12,10 +14,11 @@ def generate_sms_code():
     sms_code = random.randint(10000, 99999)
     return sms_code
 
-def send_sms_code(phone_number, confirmation_code):
+def send_sms_code(phone_number, sms_code):
     """Отправка СМС. Иммитация."""
-    message = f'Код авторизации: {confirmation_code}'
+    message = f'Код авторизации: {sms_code}'
     print(message)
+
 
     # """Отправка СМС через sms.ru."""
     # api_id = os.getenv('SMSRU_API_ID')
