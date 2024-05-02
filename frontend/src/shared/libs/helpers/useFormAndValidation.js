@@ -1,3 +1,4 @@
+import * as Yup from 'yup';
 import { useEffect, useState } from 'react';
 import { EMAILREGEX } from '../../consts/constants';
 
@@ -47,19 +48,24 @@ const useFormAndValidation = (initialState, validationSchema) => {
 			[input.name]: input.value,
 		}));
 
-		validationSchema
-			.validateAt(input.name, form)
+		validateField(input.name, input.value);
+	};
+
+	// валидация форм с помощью Yup
+	const validateField = (name, value) => {
+		Yup.reach(validationSchema, name)
+			.validate(value)
 			.then(() => {
 				setErrors((prevState) => ({
 					...prevState,
-					[input.name]: '',
+					[name]: '',
 				}));
 			})
-			.catch((error) => {
+			.catch((err) => {
 				setIsFormValid(false);
 				setErrors((prevState) => ({
 					...prevState,
-					[input.name]: error.message,
+					[name]: err.message,
 				}));
 			});
 	};
