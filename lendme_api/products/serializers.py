@@ -29,7 +29,7 @@ class ProductSerializer(serializers.ModelSerializer):
         )
 
 
-class AdressSerializer(serializers.ModelSerializer):
+class AddressSerializer(serializers.ModelSerializer):
     """Сериализатор для модели Adress."""
 
     class Meta:
@@ -39,7 +39,7 @@ class AdressSerializer(serializers.ModelSerializer):
         fields = ("address", "city", "metro")
 
 
-class DepositSerializer(serializers.Serializer):
+class DepositeSerializer(serializers.Serializer):
     """Сериализатор модели Deposit."""
 
     class Meta:
@@ -50,7 +50,7 @@ class DepositSerializer(serializers.Serializer):
 class ProductDepositeSerializer(serializers.ModelSerializer):
     """Сериализатор модели ProductDeposite."""
 
-    deposite = DepositSerializer()
+    deposite = DepositeSerializer()
 
     class Meta:
         model = ProductDeposite
