@@ -26,6 +26,7 @@ class CustomUser(AbstractUser):
         null=False,
     )
     phone_number = PhoneNumberField(
+        # Номер телефона начинается с +7
         "Номер телефон",
         region='RU',
         unique=True,
