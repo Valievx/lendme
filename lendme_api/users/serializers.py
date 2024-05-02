@@ -58,7 +58,7 @@ class PhoneSmsSerializer(serializers.Serializer):
     """Сериализатор для номера телефона и смс кода."""
 
     phone_number = serializers.CharField(max_length=12)
-    sms_code = serializers.IntegerField(required=False)
+    sms_code = serializers.CharField(required=False)
 
     @staticmethod
     def validate_phone_number(value):

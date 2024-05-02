@@ -47,11 +47,6 @@ class CustomUser(AbstractUser):
         blank=False,
         null=False,
     )
-    confirmation_code = models.CharField(
-        "Код подтверждения",
-        max_length=5,
-        blank=True
-    )
     date_joined = models.DateTimeField(
         auto_now_add=True,
     )
