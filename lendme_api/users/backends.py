@@ -30,7 +30,7 @@ class AuthBackend(ModelBackend):
         except CustomUser.DoesNotExist:
             return None
 
-        if user.email == phone_number and not user.is_verified:
+        if user.email == phone_number and not user.is_email_verified:
             raise ValidationError(_("Емаил не подтвержден."))
 
         if user.phone_number == phone_number and not user.is_phone_verified:

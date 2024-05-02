@@ -48,9 +48,7 @@ class UserSerializer(serializers.ModelSerializer):
             "name",
             "email",
             "phone_number",
-            "password",
-            "is_superuser",
-            "is_staff"
+            "password"
         )
         read_only_fields = ("is_superuser", "is_staff")
         extra_kwargs = {"password": {"write_only": True}}
@@ -59,7 +57,7 @@ class UserSerializer(serializers.ModelSerializer):
 class PhoneSmsSerializer(serializers.Serializer):
     """Сериализатор для номера телефона и смс кода."""
 
-    phone_number = serializers.CharField(max_length=10)
+    phone_number = serializers.CharField(max_length=12)
     sms_code = serializers.IntegerField(required=False)
 
     @staticmethod
@@ -98,7 +96,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
             token["email"] = user.email
 
         if hasattr(user, "phone_number"):
-            token["phone_number"] = user.phone_number
+            token["phone_number"] = str(user.phone_number)
 
         if hasattr(user, "name"):
             token["name"] = user.name

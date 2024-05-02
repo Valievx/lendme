@@ -12,7 +12,6 @@ from rest_framework_simplejwt.exceptions import InvalidToken
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.http import JsonResponse
-from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 from django.middleware.csrf import get_token
 

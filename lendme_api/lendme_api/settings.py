@@ -37,9 +37,10 @@ INSTALLED_APPS = [
     "social_django",
     "drf_spectacular",
     "drf_spectacular_sidecar",
-    'corsheaders',
-    'rest_framework',
-    'rest_framework.authtoken',
+    "corsheaders",
+    "rest_framework",
+    "rest_framework.authtoken",
+    "phonenumber_field",
 ]
 
 MIDDLEWARE = [
