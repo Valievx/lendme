@@ -14,6 +14,7 @@ from django.utils import timezone
 from django.http import JsonResponse
 from django.conf import settings
 from django.middleware.csrf import get_token
+from django.core.cache import cache
 
 from users.utils import get_client_ip, get_location_by_ip
 from users.models import CustomUser, AuthTransaction
@@ -169,9 +170,8 @@ class SmsCodeCreateView(APIView):
                 sms_code = generate_sms_code()
                 send_sms_code(phone_number, sms_code)
 
-                user = CustomUser.objects.get(phone_number=phone_number)
-                user.confirmation_code = sms_code
-                user.save()
+                # Сохраняем код подтверждения в Redis
+                cache.set(phone_number, sms_code, timeout=None)
 
                 return Response(
                     {
@@ -215,23 +215,28 @@ class SmsCodeVerificationView(APIView):
 
     def post(self, request):
         """Метод обрабатывает POST запрос для проверки смс кода."""
-        print(request.data)
         phone_number = request.data.get("phone_number")
         sms_code = request.data.get("sms_code")
         user = get_object_or_404(CustomUser, phone_number=phone_number)
-        print(user.confirmation_code)
 
-        if sms_code == user.confirmation_code:
-            user.is_phone_verified = True
-            user.save()
-            return Response(
-                {"message": "Номер телефона успешно подтвержден"},
-                status=status.HTTP_200_OK,
-            )
-        else:
-            return Response(
-                {"message": "Неправильный смс код"}, status=status.HTTP_400_BAD_REQUEST
-            )
+        # Получаем SMS-код из Redis
+        stored_sms_code = cache.get(phone_number)
+
+        # Преобразуем stored_sms_code в строку для сравнения
+        stored_sms_code_str = str(stored_sms_code) if stored_sms_code is not None else None
+
+        if stored_sms_code_str and isinstance(sms_code, str):
+            if sms_code == stored_sms_code_str:
+                user.is_phone_verified = True
+                user.save()
+                return Response(
+                    {"message": "Номер телефона успешно подтвержден"},
+                    status=status.HTTP_200_OK,
+                )
+        return Response(
+            {"message": "Неправильный смс код"},
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
 
 @extend_schema(
