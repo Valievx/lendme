@@ -9,7 +9,8 @@ from .manager import CustomUserManager
 
 class CustomUser(AbstractUser):
     """Модель Пользователя."""
-
+    # Когда перейдем на PostgreSQL установить id
+    # id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     username = None
     name = models.CharField(
         "Имя пользователя",
@@ -58,7 +59,6 @@ class CustomUser(AbstractUser):
         "Проверка email",
         default=False,
     )
-    is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
 
@@ -122,6 +122,14 @@ class AuthTransaction(models.Model):
     class Meta:
         verbose_name = "Транзакция аутентификации"
         verbose_name_plural = "Транзакции аутентификаций"
+
+
+class EmailConfirmationToken(models.Model):
+    """Модель токена подтверждения Email почты."""
+    # Когда перейдем на PostgreSQL установить id
+    # id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
 
 
 class Favorite(models.Model):

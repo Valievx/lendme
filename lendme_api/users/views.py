@@ -1,7 +1,7 @@
 from rest_framework.generics import CreateAPIView
 from rest_framework import status
 from rest_framework.views import APIView
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework_simplejwt.settings import api_settings
@@ -17,13 +17,14 @@ from django.middleware.csrf import get_token
 from django.core.cache import cache
 
 from users.utils import get_client_ip, get_location_by_ip
-from users.models import CustomUser, AuthTransaction
-from users.services import generate_sms_code, send_sms_code
+from users.models import CustomUser, AuthTransaction, EmailConfirmationToken
+from users.services import generate_sms_code, send_sms_code, send_confirmation_email
 from users.serializers import (
     UserSerializer,
     PhoneSmsSerializer,
     CustomTokenObtainPairSerializer,
     PasswordResetSerializer,
+    SendEmailConfirmationTokenSerializer,
 )
 
 from drf_spectacular.utils import (
@@ -322,3 +323,64 @@ class PasswordResetView(APIView):
                 {"message": "Пароль успешно обновлен."},
                 status=status.HTTP_202_ACCEPTED,
             )
+
+
+class SendEmailConfirmationTokenView(APIView):
+    """
+    Подтверждение Email
+
+    Отправка на email токена для подтверждения почты.
+    Требуемые данные: email.
+    """
+
+    permission_classes = (IsAuthenticated,)
+    serializer_class = SendEmailConfirmationTokenSerializer
+
+    def post(self, request):
+        """
+        Метод обрабатывает POST запрос
+        на отправку токена по почту.
+        """
+        serializer = SendEmailConfirmationTokenSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            user = request.user
+            token = EmailConfirmationToken.objects.create(user=user)
+
+            send_confirmation_email(
+                email=user.email,
+                token_id=token.pk,
+                user_id=user.pk
+            )
+            return Response(
+                {"message": "Токен успешно отправлен."},
+                status=status.HTTP_201_CREATED
+            )
+        else:
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+
+def confirm_email_view(request):
+    """
+    Метод обрабатывает GET запрос
+    подтверждения токена по почте.
+    """
+    token_id = request.GET.get('token_id')
+    user_id = request.GET.get('user_id')
+
+    try:
+        token = EmailConfirmationToken.objects.get(pk=token_id)
+        user = token.user
+        user.is_email_verified = True
+        user.save()
+        return JsonResponse(
+            {'message': 'Email успешно подтвержден'},
+            status=status.HTTP_200_OK
+        )
+    except EmailConfirmationToken.DoesNotExist:
+        return JsonResponse(
+            {'message': 'Неверный токен'},
+            status=status.HTTP_400_BAD_REQUEST
+        )

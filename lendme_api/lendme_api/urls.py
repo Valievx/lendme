@@ -3,6 +3,9 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path, re_path
 
+from rest_framework.routers import DefaultRouter
+
+
 from drf_spectacular.views import (
     SpectacularAPIView,
     SpectacularRedocView,
@@ -11,9 +14,13 @@ from drf_spectacular.views import (
 
 app_name = "lend_me"
 
+router = DefaultRouter()
+
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/user/", include("users.urls")),
+    path("api/", include(router.urls)),
     path("schema/", SpectacularAPIView.as_view(), name="schema"),
     path(
          "swagger/",
