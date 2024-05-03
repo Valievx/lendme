@@ -130,3 +130,14 @@ class PasswordResetSerializer(serializers.Serializer):
             raise NotFound(_("Пользователь с указанным адресом электронной почты не существует."))
 
         return attrs
+
+
+class SendEmailConfirmationTokenSerializer(serializers.Serializer):
+    """Сериализатор для отправки токена подтверждения на почту."""
+    email = serializers.EmailField()
+
+    def validate_email(self, value):
+        user = self.context['request'].user
+        if user.email != value:
+            raise ValidationError("Указанный адрес электронной почты не соответствует.")
+        return value

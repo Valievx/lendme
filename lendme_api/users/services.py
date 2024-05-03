@@ -5,6 +5,8 @@ import os
 from dotenv import load_dotenv
 
 from django.core.cache import cache
+from django.core.mail import send_mail
+from django.template.loader import get_template
 
 load_dotenv()
 
@@ -41,3 +43,19 @@ def send_sms_code(phone_number, sms_code):
     #         print(f'Ошибка при отправке сообщения: {result.get("status_code")}')
     # else:
     #     print('Ошибка при отправке запроса')
+
+
+def send_confirmation_email(email, token_id, user_id):
+    """Функция отправки токена по почте."""
+    data = {
+        'token_id': str(token_id),
+        'user_id': str(user_id)
+    }
+    message = get_template('confirmation_email.txt').render(data)
+    send_mail(
+        subject='Пожалуйста, подтвердите адрес электронной почты',
+        message=message,
+        from_email='lendme46@gmail.com',
+        recipient_list=[email],
+        fail_silently=True
+    )

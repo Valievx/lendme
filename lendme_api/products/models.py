@@ -90,7 +90,7 @@ class ProductDeposite(models.Model):
         related_name="products_deposite",
         on_delete=models.CASCADE,
     )
-    deposit = models.ForeignKey(
+    deposite = models.ForeignKey(
         "Deposite",
         verbose_name="Депозит",
         related_name="products_deposite",
@@ -134,7 +134,13 @@ class Category(models.Model):
         max_length=35,
         unique=False,
     )
-    image = ...
+    image = models.ImageField(
+        verbose_name="Изображение категории",
+        upload_to="categories/image_categories",
+        unique=False,
+        null=True,
+        blank=True
+    )
 
 
 class SubCategory1(models.Model):
@@ -151,7 +157,18 @@ class SubCategory1(models.Model):
         max_length=35,
         unique=False,
     )
-    image = ...
+    image = models.ImageField(
+        verbose_name="Изображение категории",
+        upload_to="categories/image_subcategories1",
+        unique=False,
+        null=True,
+        blank=True
+    )
+    category = models.ForeignKey(
+        "Category",
+        on_delete=models.CASCADE,
+        related_name='subcategories1',
+    )
 
 
 class SubCategory2(models.Model):
@@ -168,4 +185,15 @@ class SubCategory2(models.Model):
         max_length=35,
         unique=False,
     )
-    image = ...
+    image = models.ImageField(
+        verbose_name="Изображение категории",
+        upload_to="categories/image_subcategories2",
+        unique=False,
+        null=True,
+        blank=True
+    )
+    subcategory1 = models.ForeignKey(
+        "SubCategory1",
+        on_delete=models.CASCADE,
+        related_name='subcategories2',
+    )

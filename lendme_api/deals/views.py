@@ -1,3 +1,10 @@
-from django.shortcuts import render
+from rest_framework import viewsets
 
-# Create your views here.
+from .models import Deals
+from .serializers import DealsSerializer
+
+
+class DealsViewSet(viewsets.ModelViewSet):
+    '''Класс для работы с моделью Deals.'''
+    queryset = Deals.objects.all()
+    serializer_class = DealsSerializer
