@@ -1,9 +1,9 @@
 .categories-bar {
-  @include main-container;
   @include flex-row-center;
-  column-gap: $cl-gap-m;
-  padding-left: $padding-lr;
-  padding-right: $padding-lr;
+  max-width: $max-width-min;
+  width: 100%;
+  margin: 0 auto;
+  column-gap: $cl-gap-l;
 
   &__inner {
     @include flex-row-center;
