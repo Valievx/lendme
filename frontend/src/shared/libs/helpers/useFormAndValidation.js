@@ -1,4 +1,6 @@
+import * as Yup from 'yup';
 import { useEffect, useState } from 'react';
+import { EMAILREGEX } from '../../consts/constants';
 
 // кастомный хук валидации
 const useFormAndValidation = (initialState, validationSchema) => {
@@ -6,9 +8,7 @@ const useFormAndValidation = (initialState, validationSchema) => {
 	const [errors, setErrors] = useState({});
 	const [isFormValid, setIsFormValid] = useState(false);
 	const [isActiveInput, setIsActiveInput] = useState({});
-
-	// проверяет, есть ли значения в объекте
-	const hasValues = (val) => !Object.values(val).some((value) => value === '');
+	const [inputType, setInputType] = useState('email');
 
 	const handleFocus = (evt) => {
 		setIsActiveInput(evt.target);
@@ -40,33 +40,43 @@ const useFormAndValidation = (initialState, validationSchema) => {
 		setErrors(null);
 	};
 
-	const hardChangeIsFormValid = (boolean) => {
-		setIsFormValid(boolean);
+	const handleValidation = async (
+		input,
+		form,
+		setErrors,
+		setIsFormValid,
+		validationSchema
+	) => {
+		try {
+			await validationSchema.validateAt(input.name, form);
+			setErrors((prevErrors) => ({ ...prevErrors, [input.name]: '' }));
+		} catch (error) {
+			setIsFormValid(false);
+			setErrors((prevErrors) => ({
+				...prevErrors,
+				[input.name]: error.message,
+			}));
+		}
 	};
 
-	const handleChange = (evt) => {
+	const handleChange = async (evt) => {
 		const input = evt.target;
+		const updatedForm = { ...form, [input.name]: input.value };
+		setForm(updatedForm);
 
-		setForm((prevState) => ({
-			...prevState,
-			[input.name]: input.value,
-		}));
+		await handleValidation(
+			input,
+			updatedForm,
+			setErrors,
+			setIsFormValid,
+			validationSchema
+		);
+	};
 
-		validationSchema
-			.validateAt(input.name, form)
-			.then(() => {
-				setErrors((prevState) => ({
-					...prevState,
-					[input.name]: '',
-				}));
-			})
-			.catch((error) => {
-				setIsFormValid(false);
-				setErrors((prevState) => ({
-					...prevState,
-					[input.name]: error.message,
-				}));
-			});
+	const handleInputChangeEmail = (e) => {
+		const { value } = e.target;
+		setInputType(EMAILREGEX.test(value) ? 'email' : 'tel');
+		handleChange(e);
 	};
 
 	const handleSelectChange = (selectedObj) => {
@@ -77,18 +87,22 @@ const useFormAndValidation = (initialState, validationSchema) => {
 	};
 
 	useEffect(() => {
-		setIsFormValid(hasValues(form));
-	}, [form]);
+		const isValid =
+			Object.values(form).every((value) => value !== '') &&
+			!Object.values(errors).some((value) => value !== '');
+		setIsFormValid(isValid);
+	}, [form, errors]);
 
 	return {
 		form,
 		setForm,
 		errors,
 		isFormValid,
+		inputType,
 		handleChange,
+		handleInputChangeEmail,
 		handleSelectChange,
 		resetForm,
-		hardChangeIsFormValid,
 		handleFocus,
 		handleBlur,
 		updateFormInput,

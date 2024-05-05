@@ -1,19 +1,16 @@
-// import React from 'react';
-
 import { useState } from 'react';
-
 import './GeneralForm.scss';
-import { RegisterSocialLinks } from '../../../entities/RegisterSocialLinks';
-import { titlesLogin, titlesPassword } from '../../../shared/consts/constants';
 import { Popup } from '../../../shared/ui/Popup/Popup';
 import SwiperSubtitle from '../../../shared/ui/SwiperSubtitle/SwiperSubtitle';
-import { socialLinksIcons } from '../../../shared/consts/socialLinksIcons';
-import { LoginForms, RegistrationForm, PasswordResetForm } from '../';
+import {
+	LoginForms,
+	RegistrationForm,
+	PasswordResetForm,
+	ConfirmRegistration,
+} from '../';
+import { formTitles } from '../../../shared/consts/constants';
 
-// import './GeneralForm.scss';
 export const GeneralForm = (props) => {
-	let formComponent = null;
-	let titlesForm = [];
 	const { isOpenPopup, onClosePopup } = props;
 	const [activeIndex, setActiveIndex] = useState(0);
 
@@ -21,48 +18,26 @@ export const GeneralForm = (props) => {
 		setActiveIndex(index);
 	};
 
-	switch (activeIndex) {
-		case 0:
-			titlesForm = titlesLogin;
-			formComponent = (
-				<LoginForms
-					onTitleClick={handleTitleClick}
-					onClosePopup={onClosePopup}
-				/>
-			);
-			break;
-		case 1:
-			titlesForm = titlesLogin;
-			formComponent = (
-				<RegistrationForm
-					onTitleClick={handleTitleClick}
-					onClosePopup={onClosePopup}
-				/>
-			);
-			break;
-		case 2:
-			titlesForm = titlesPassword;
-			formComponent = (
-				<PasswordResetForm
-					onTitleClick={handleTitleClick}
-					onClosePopup={onClosePopup}
-				/>
-			);
-			break;
-		default:
-			formComponent = null;
-			break;
-	}
+	const formsData = [
+		{ titles: formTitles.login, component: LoginForms },
+		{ titles: formTitles.login, component: RegistrationForm },
+		{ titles: formTitles.password, component: PasswordResetForm },
+		{ titles: formTitles.registerConfirm, component: ConfirmRegistration },
+	];
+
+	const { titles, component: FormComponent } = formsData[activeIndex];
 
 	return (
 		<Popup isOpen={isOpenPopup} btnCls="button__close">
 			<SwiperSubtitle
-				titles={titlesForm}
+				titles={titles}
 				activeIndex={activeIndex}
 				OnTitleClick={handleTitleClick}
 			/>
-			{formComponent}
-			<RegisterSocialLinks data={socialLinksIcons} />
+			<FormComponent
+				onTitleClick={handleTitleClick}
+				onClosePopup={onClosePopup}
+			/>
 		</Popup>
 	);
 };
