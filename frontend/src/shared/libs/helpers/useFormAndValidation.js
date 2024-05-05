@@ -1,3 +1,4 @@
+import * as Yup from 'yup';
 import { useEffect, useState } from 'react';
 import { EMAILREGEX } from '../../consts/constants';
 
