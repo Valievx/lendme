@@ -39,29 +39,37 @@ const useFormAndValidation = (initialState, validationSchema) => {
 		setErrors(null);
 	};
 
-	const handleChange = (evt) => {
-		const input = evt.target;
-
-		setForm((prevState) => ({
-			...prevState,
-			[input.name]: input.value,
-		}));
-
+	const handleValidation = async (
+		input,
+		form,
+		setErrors,
+		setIsFormValid,
 		validationSchema
-			.validateAt(input.name, form)
-			.then(() => {
-				setErrors((prevState) => ({
-					...prevState,
-					[input.name]: '',
-				}));
-			})
-			.catch((error) => {
-				setIsFormValid(false);
-				setErrors((prevState) => ({
-					...prevState,
-					[input.name]: error.message,
-				}));
-			});
+	) => {
+		try {
+			await validationSchema.validateAt(input.name, form);
+			setErrors((prevErrors) => ({ ...prevErrors, [input.name]: '' }));
+		} catch (error) {
+			setIsFormValid(false);
+			setErrors((prevErrors) => ({
+				...prevErrors,
+				[input.name]: error.message,
+			}));
+		}
+	};
+
+	const handleChange = async (evt) => {
+		const input = evt.target;
+		const updatedForm = { ...form, [input.name]: input.value };
+		setForm(updatedForm);
+
+		await handleValidation(
+			input,
+			updatedForm,
+			setErrors,
+			setIsFormValid,
+			validationSchema
+		);
 	};
 
 	const handleInputChangeEmail = (e) => {
