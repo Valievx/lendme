@@ -11,7 +11,8 @@ from users.views import (
     CustomTokenRefreshView,
     SendEmailConfirmationTokenView,
     SetNewPassword,
-    ConfirmEmailView
+    ConfirmEmailView,
+    LogoutView
 )
 
 
@@ -36,4 +37,6 @@ urlpatterns = [
     path("password-reset-complete/", SetNewPassword.as_view(), name="password-reset-complete"),
     # api/user/refresh-token/
     path("refresh-token/", CustomTokenRefreshView.as_view(), name="refresh_token"),
+    # api/user/logout/
+    path("logout/", LogoutView.as_view(), name="logout"),
 ]

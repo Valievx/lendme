@@ -8,6 +8,8 @@ from rest_framework_simplejwt.settings import api_settings
 from rest_framework_simplejwt.views import TokenRefreshView
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.exceptions import InvalidToken
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.authtoken.models import Token
 
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
@@ -355,6 +357,15 @@ class PasswordResetView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@extend_schema(
+    tags=["Пользователи"],
+    methods=["GET"],
+)
+@extend_schema_view(
+    post=extend_schema(
+        summary="Проверка действительности токена",
+    ),
+)
 class PasswordTokenCheck(APIView):
     """
     Проверка действительности токена, который
@@ -392,6 +403,15 @@ class PasswordTokenCheck(APIView):
             )
 
 
+@extend_schema(
+    tags=["Пользователи"],
+    methods=["PATCH"],
+)
+@extend_schema_view(
+    post=extend_schema(
+        summary="Установка нового пароля",
+    ),
+)
 class SetNewPassword(APIView):
     """
     Установка нового пароля пользователя
@@ -421,6 +441,15 @@ class SetNewPassword(APIView):
             )
 
 
+@extend_schema(
+    tags=["Пользователи"],
+    methods=["POST"],
+)
+@extend_schema_view(
+    post=extend_schema(
+        summary="Подтверждение Email",
+    ),
+)
 class SendEmailConfirmationTokenView(APIView):
     """
     Подтверждение Email
@@ -463,6 +492,15 @@ class SendEmailConfirmationTokenView(APIView):
             )
 
 
+@extend_schema(
+    tags=["Пользователи"],
+    methods=["GET"],
+)
+@extend_schema_view(
+    post=extend_schema(
+        summary="Подтверждения токена по почте",
+    ),
+)
 class ConfirmEmailView(APIView):
     """
     Метод обрабатывает GET запрос
@@ -505,5 +543,39 @@ class ConfirmEmailView(APIView):
         except Exception as e:
             return JsonResponse(
                 {"message": f"Недействительный токен или идентификатор пользователя, {e}"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+
+@extend_schema(
+    tags=["Пользователи"],
+    methods=["POST"],
+)
+@extend_schema_view(
+    post=extend_schema(
+        summary="Выход из системы",
+    ),
+)
+class LogoutView(APIView):
+    """
+    Выход из системы
+
+    Используется для выхода из системы.
+    """
+
+    def post(self, request):
+        """Метод для выхода из системы."""
+        try:
+            jwt_auth = JWTAuthentication()
+            user, _ = jwt_auth.authenticate(request)
+            if user:
+                Token.objects.filter(user=user).delete()
+                return Response(
+                    {"message": "Вы успешно вышли из системы."},
+                    status=status.HTTP_200_OK
+                )
+        except Exception as e:
+            return Response(
+                {"message": f"Не удалось выйти из системы.{e}"},
                 status=status.HTTP_400_BAD_REQUEST
             )

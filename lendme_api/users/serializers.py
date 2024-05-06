@@ -117,6 +117,11 @@ class PasswordResetSerializer(serializers.Serializer):
         """
         try:
             user = CustomUser.objects.get(email=value)
+
+            if not user.is_email_verified:
+                raise serializers.ValidationError(
+                    "Email не подтвержден, сброс пароля невозможен."
+                )
         except CustomUser.DoesNotExist:
             raise serializers.ValidationError(
                 "Пользователь с таким адресом электронной почты не существует"
