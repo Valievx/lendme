@@ -458,7 +458,7 @@ class SendEmailConfirmationTokenView(APIView):
     Требуемые данные: email.
     """
 
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
     serializer_class = SendEmailConfirmationTokenSerializer
 
     def post(self, request):
@@ -509,7 +509,7 @@ class ConfirmEmailView(APIView):
     Требуемые данные: uidb64 и token.
     """
 
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
 
     def get(self, request):
         """
@@ -523,9 +523,13 @@ class ConfirmEmailView(APIView):
         token = request.GET.get("token")
 
         try:
+            print(uidb64)
             id = force_str(urlsafe_base64_decode(uidb64), encoding='latin-1')
+            print(id)
             user = CustomUser.objects.get(id=id)
+            print(user)
             token_obj = EmailConfirmationToken.objects.get(token=token, user=user)
+            print(token_obj)
 
             if token_obj.is_valid():
                 user.is_email_verified = True
