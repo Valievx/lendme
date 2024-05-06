@@ -7,9 +7,11 @@ from users.views import (
     SmsCodeCreateView,
     SmsCodeVerificationView,
     PasswordResetView,
+    PasswordTokenCheck,
     CustomTokenRefreshView,
     SendEmailConfirmationTokenView,
-    confirm_email_view
+    SetNewPassword,
+    ConfirmEmailView
 )
 
 
@@ -23,11 +25,15 @@ urlpatterns = [
     # api/user/send_token_email/
     path("send_token_email/", SendEmailConfirmationTokenView.as_view(), name="send_token_email"),
     # api/user/confirm_email/
-    path("confirm_email/", confirm_email_view, name="confirm_email"),
+    path("confirm_email/", ConfirmEmailView.as_view(), name="confirm_email"),
     # api/user/login/
     path("login/", LoginView.as_view(), name="login"),
-    # api/user/password/reset/
-    path("password/reset/", PasswordResetView.as_view(), name="reset_user_password"),
+    # api/user/request-reset-password/
+    path("request-reset-password/", PasswordResetView.as_view(), name="request-reset-password"),
+    # api/user/password-reset/<uidb64>/<token>/
+    path("password-reset/<uidb64>/<token>/", PasswordTokenCheck.as_view(), name="password-reset-confirm"),
+    # api/user/password-reset-complete/
+    path("password-reset-complete/", SetNewPassword.as_view(), name="password-reset-complete"),
     # api/user/refresh-token/
     path("refresh-token/", CustomTokenRefreshView.as_view(), name="refresh_token"),
 ]

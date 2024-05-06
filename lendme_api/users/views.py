@@ -11,20 +11,31 @@ from rest_framework_simplejwt.exceptions import InvalidToken
 
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
+from django.utils.encoding import smart_str, force_str, smart_bytes
+from django.utils.encoding import DjangoUnicodeDecodeError
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.http import JsonResponse
 from django.conf import settings
 from django.middleware.csrf import get_token
 from django.core.cache import cache
+from django.contrib.sites.shortcuts import get_current_site
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from django.urls import reverse
 
 from users.utils import get_client_ip, get_location_by_ip
 from users.models import CustomUser, AuthTransaction, EmailConfirmationToken
-from users.services import generate_sms_code, send_sms_code, send_confirmation_email
+
+from users.services import (
+    generate_sms_code, send_sms_code,
+    send_confirmation_email, send_reset_password
+)
 from users.serializers import (
     UserSerializer,
     PhoneSmsSerializer,
     CustomTokenObtainPairSerializer,
     PasswordResetSerializer,
     SendEmailConfirmationTokenSerializer,
+    SetNewPasswordSerializer
 )
 
 from drf_spectacular.utils import (
@@ -305,23 +316,108 @@ class CustomTokenRefreshView(TokenRefreshView):
     ),
 )
 class PasswordResetView(APIView):
-    """Сброс пароля"""
+    """Сброс пароля
 
-    permission_classes = (AllowAny,)
+    Отправка на email инструкции для сброса пароля.
+    Требуемые данные: email.
+    """
+
+    permission_classes = (IsAuthenticated,)
+    serializer_class = PasswordResetSerializer
 
     def post(self, request):
         """Метод сброса пароля"""
-        serializer = PasswordResetSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            email = serializer.validated_data["email"]
+            try:
+                user = CustomUser.objects.get(email=email)
+            except CustomUser.DoesNotExist:
+                return Response(
+                    {"message": "Пользователь с таким адресом электронной почты не существует"},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
 
-        user = CustomUser.objects.get(email=serializer.validated_data["email"])
+            uidb64 = urlsafe_base64_encode(smart_bytes(user.id))
+            token = PasswordResetTokenGenerator().make_token(user)
+            current_site = get_current_site(request=request).domain
+            relative_link = reverse(
+                "password-reset-confirm",
+                kwargs={"uidb64": uidb64, "token": token}
+            )
+            absurl = "http://" + current_site + relative_link
+            send_reset_password(absurl, email)
+            return Response(
+                {"message": "Мы отправили вам ссылку для сброса пароля"},
+                status=status.HTTP_200_OK
+            )
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        if serializer.validated_data["email"]:
-            user.set_password(serializer.validated_data["password"])
-            user.save()
-            return JsonResponse(
-                {"message": "Пароль успешно обновлен."},
-                status=status.HTTP_202_ACCEPTED,
+
+class PasswordTokenCheck(APIView):
+    """
+    Проверка действительности токена, который
+    используется для сброса пароля пользователя
+
+    Требуемые данные: token, uidb64.
+    """
+
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, uidb64, token):
+        """Метод проверяет действительность токена сброса пароля."""
+        try:
+            id = smart_str(urlsafe_base64_decode(uidb64))
+            user = CustomUser.objects.get(id=id)
+
+            if not PasswordResetTokenGenerator().check_token(user, token):
+                return Response(
+                    {"message": "Токен недействителен, запросите новый."},
+                    status=status.HTTP_401_UNAUTHORIZED
+                )
+            return Response(
+                {"success": True,
+                 "message": "Токен действителен",
+                 "uidb64": uidb64,
+                 "token": token
+                 },
+                status=status.HTTP_200_OK
+            )
+
+        except DjangoUnicodeDecodeError as e:
+            return Response(
+                {"message": f"Токен недействителен, запросите новый. {e}"},
+                status=status.HTTP_401_UNAUTHORIZED
+            )
+
+
+class SetNewPassword(APIView):
+    """
+    Установка нового пароля пользователя
+    после успешного сброса пароля.
+
+    Требуемые данные: password, token, uidb64.
+    """
+
+    permission_classes = (IsAuthenticated,)
+    serializer_class = SetNewPasswordSerializer
+
+    def patch(self, request):
+        """Метод для обновления пароля."""
+        serializer = self.serializer_class(data=request.data)
+
+        if serializer.is_valid():
+            return Response(
+                {"success": True,
+                 "message": "Пароль успешно обновлен"},
+                status=status.HTTP_200_OK
+            )
+        else:
+            return Response(
+                {"success": False,
+                 "errors": serializer.errors},
+                status=status.HTTP_400_BAD_REQUEST
             )
 
 
@@ -341,16 +437,21 @@ class SendEmailConfirmationTokenView(APIView):
         Метод обрабатывает POST запрос
         на отправку токена по почту.
         """
-        serializer = SendEmailConfirmationTokenSerializer(data=request.data, context={'request': request})
+        serializer = self.serializer_class(
+            data=request.data,
+            context={"request": request}
+        )
         if serializer.is_valid():
             user = request.user
-            token = EmailConfirmationToken.objects.create(user=user)
-
-            send_confirmation_email(
-                email=user.email,
-                token_id=token.pk,
-                user_id=user.pk
+            token = PasswordResetTokenGenerator().make_token(user)
+            email_confirmation_token = EmailConfirmationToken.objects.create(
+                user=user,
+                token=token
             )
+            uidb64 = urlsafe_base64_encode(force_str(user.pk).encode())
+            token_str = email_confirmation_token.token
+
+            send_confirmation_email(user.email, uidb64, token_str)
             return Response(
                 {"message": "Токен успешно отправлен."},
                 status=status.HTTP_201_CREATED
@@ -362,25 +463,47 @@ class SendEmailConfirmationTokenView(APIView):
             )
 
 
-def confirm_email_view(request):
+class ConfirmEmailView(APIView):
     """
     Метод обрабатывает GET запрос
     подтверждения токена по почте.
-    """
-    token_id = request.GET.get('token_id')
-    user_id = request.GET.get('user_id')
 
-    try:
-        token = EmailConfirmationToken.objects.get(pk=token_id)
-        user = token.user
-        user.is_email_verified = True
-        user.save()
-        return JsonResponse(
-            {'message': 'Email успешно подтвержден'},
-            status=status.HTTP_200_OK
-        )
-    except EmailConfirmationToken.DoesNotExist:
-        return JsonResponse(
-            {'message': 'Неверный токен'},
-            status=status.HTTP_400_BAD_REQUEST
-        )
+    Требуемые данные: uidb64 и token.
+    """
+
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        """
+        Метод обрабатывает GET запрос
+        подтверждения токена по почте.
+
+        Требуемые данные: uidb64 и token.
+        """
+
+        uidb64 = request.GET.get("uidb64")
+        token = request.GET.get("token")
+
+        try:
+            id = force_str(urlsafe_base64_decode(uidb64), encoding='latin-1')
+            user = CustomUser.objects.get(id=id)
+            token_obj = EmailConfirmationToken.objects.get(token=token, user=user)
+
+            if token_obj.is_valid():
+                user.is_email_verified = True
+                user.save()
+                token_obj.delete()
+                return JsonResponse(
+                    {"message": "Email успешно подтвержден"},
+                    status=status.HTTP_200_OK
+                )
+            else:
+                return JsonResponse(
+                    {"message": "Недействительный токен или истек срок действия"},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+        except Exception as e:
+            return JsonResponse(
+                {"message": f"Недействительный токен или идентификатор пользователя, {e}"},
+                status=status.HTTP_400_BAD_REQUEST
+            )

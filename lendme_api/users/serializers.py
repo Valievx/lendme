@@ -1,12 +1,13 @@
 from django.contrib.auth.password_validation import validate_password
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
-from django.core.validators import EmailValidator
 from django.utils.translation import gettext_lazy as _
+from django.utils.encoding import smart_str, force_str, smart_bytes
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from rest_framework.exceptions import NotFound
 
 from users.models import CustomUser
 
@@ -60,13 +61,13 @@ class PhoneSmsSerializer(serializers.Serializer):
     phone_number = serializers.CharField(max_length=12)
     sms_code = serializers.CharField(required=False)
 
-    @staticmethod
-    def validate_phone_number(value):
+
+    def validate_phone_number(self, value: str) -> str:
         """Метод валидации номера телефона."""
         return value
 
-    @staticmethod
-    def validate_sms_code(value):
+
+    def validate_sms_code(self, value: str) -> str:
         """Метод валидации смс кода."""
         if len(str(value)) != 5:
             raise serializers.ValidationError(
@@ -108,36 +109,56 @@ class PasswordResetSerializer(serializers.Serializer):
     """Сериализатор для сброса пароля."""
 
     email = serializers.EmailField(required=True)
-    password = serializers.CharField(required=True)
 
-    def get_user(self, destination: str) -> CustomUser:
-
-        try:
-            user = CustomUser.objects.get(email=destination)
-        except CustomUser.DoesNotExist:
-            user = None
-        return user
-
-    def validate(self, attrs: dict) -> dict:
-        """Проверяет, существует ли пользователь с
-        предоставленной электронной почтой.
+    def validate_email(self, value: str) -> str:
         """
-        validator = EmailValidator()
-        validator(attrs.get("email"))
-        user = self.get_user(attrs.get("email"))
+        Проверяет, существует ли пользователь
+        с предоставленной электронной почтой.
+        """
+        try:
+            user = CustomUser.objects.get(email=value)
+        except CustomUser.DoesNotExist:
+            raise serializers.ValidationError(
+                "Пользователь с таким адресом электронной почты не существует"
+            )
+        return value
 
-        if not user:
-            raise NotFound(_("Пользователь с указанным адресом электронной почты не существует."))
 
-        return attrs
+class SetNewPasswordSerializer(serializers.Serializer):
+    """Сериализатор для создания нового пароля."""
+
+    password = serializers.CharField(min_length=6, max_length=68, write_only=True)
+    token = serializers.CharField(min_length=1, write_only=True)
+    uidb64 = serializers.CharField(min_length=1, write_only=True)
+
+    def validate(self, attrs):
+        try:
+            password = attrs.get("password")
+            token = attrs.get("token")
+            uidb64 = attrs.get("uidb64")
+
+            id = force_str(urlsafe_base64_decode(uidb64))
+            user = CustomUser.objects.get(id=id)
+            if not PasswordResetTokenGenerator().check_token(user, token):
+                raise serializers.ValidationError("Недействительная ссылка для сброса пароля")
+
+            user.set_password(password)
+            user.save()
+
+            return user
+
+        except CustomUser.DoesNotExist:
+            raise serializers.ValidationError("Пользователь не найден")
+        except Exception:
+            raise serializers.ValidationError("Недействительная ссылка для сброса пароля")
 
 
 class SendEmailConfirmationTokenSerializer(serializers.Serializer):
     """Сериализатор для отправки токена подтверждения на почту."""
     email = serializers.EmailField()
 
-    def validate_email(self, value):
-        user = self.context['request'].user
+    def validate_email(self, value: str) -> str:
+        user = self.context["request"].user
         if user.email != value:
             raise ValidationError("Указанный адрес электронной почты не соответствует.")
         return value

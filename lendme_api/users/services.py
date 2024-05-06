@@ -8,6 +8,7 @@ from django.core.cache import cache
 from django.core.mail import send_mail
 from django.template.loader import get_template
 
+
 load_dotenv()
 
 
@@ -18,7 +19,7 @@ def generate_sms_code():
 
 def send_sms_code(phone_number, sms_code):
     """Отправка СМС. Иммитация."""
-    message = f'Код авторизации: {sms_code}'
+    message = f"Код авторизации: {sms_code}"
     print(message)
 
 
@@ -45,17 +46,33 @@ def send_sms_code(phone_number, sms_code):
     #     print('Ошибка при отправке запроса')
 
 
-def send_confirmation_email(email, token_id, user_id):
+def send_confirmation_email(email, uidb64, token):
     """Функция отправки токена по почте."""
     data = {
-        'token_id': str(token_id),
-        'user_id': str(user_id)
+        "uidb64": uidb64,
+        "token": token
     }
-    message = get_template('confirmation_email.txt').render(data)
+    message = get_template("confirmation_email.txt").render(data)
     send_mail(
-        subject='Пожалуйста, подтвердите адрес электронной почты',
+        subject="Пожалуйста, подтвердите адрес электронной почты",
         message=message,
-        from_email='lendme46@gmail.com',
+        from_email="lendme46@gmail.com",
+        recipient_list=[email],
+        fail_silently=True
+    )
+
+
+def send_reset_password(absurl, email):
+    """Функция отправки инструкции для сброса пароля по почте."""
+    data = {
+        "absurl": absurl,
+    }
+    message = get_template("reset_password.txt").render(data)
+
+    send_mail(
+        subject="Восстановление доступа к профилю",
+        message=message,
+        from_email="lendme46@gmail.com",
         recipient_list=[email],
         fail_silently=True
     )
