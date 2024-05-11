@@ -31,7 +31,6 @@ class CustomUserManager(BaseUserManager):
             password=password,
         )
         user.set_password(password)
-        # user.is_active = True
         user.save(using=self._db)
         return user
 
@@ -46,7 +45,6 @@ class CustomUserManager(BaseUserManager):
 
         extra_fields.setdefault("is_superuser", True)
         extra_fields.setdefault("is_staff", True)
-        extra_fields.setdefault("is_active", True)
 
         if extra_fields.get("is_superuser") is not True:
             raise ValueError(
@@ -63,10 +61,7 @@ class CustomUserManager(BaseUserManager):
             **extra_fields,
         )
         user.is_phone_verified = True
-        user.is_verified = True
-        user.is_admin = True
         user.is_staff = True
         user.is_superuser = True
-        user.is_active = True
         user.save(using=self._db)
         return user

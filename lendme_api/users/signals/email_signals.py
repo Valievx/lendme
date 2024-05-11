@@ -9,15 +9,13 @@ from django.utils.encoding import force_bytes
 from ..services import send_confirmation_email
 from ..models import EmailConfirmationToken
 
-account_activation_token = PasswordResetTokenGenerator()
-
 
 @receiver(post_save, sender=get_user_model())
 def post_register(sender, instance, created, **kwargs):
     """Создает токен подтверждения почты для нового пользователя и отправляет сообщение."""
     if created:
         # Создаем токен подтверждения почты для нового пользователя
-        token = account_activation_token.make_token(instance)
+        token = PasswordResetTokenGenerator().make_token(instance)
         EmailConfirmationToken.objects.create(
             user=instance,
             token=token
