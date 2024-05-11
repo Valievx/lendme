@@ -188,7 +188,8 @@ TOKEN_MODEL = "users.CustomUser"
 AUTHENTICATION_BACKENDS = (
     "social_core.backends.vk.VKOAuth2",
     "social_core.backends.github.GithubOAuth2",
-    'users.backends.AuthBackend'
+    "users.backends.AuthBackend",
+    "users.backends.AdminAuthBackend",
 )
 
 SOCIAL_AUTH_PIPELINE = (
