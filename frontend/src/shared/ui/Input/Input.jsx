@@ -30,6 +30,7 @@ export const Input = (props) => {
 				value={inputValue || ''}
 				autoComplete="off"
 				onChange={() => {}}
+        tabIndex="0"
 				{...otherProps}
 			/>
 			{inputError ? (
