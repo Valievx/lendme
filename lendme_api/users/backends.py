@@ -27,7 +27,7 @@ class AuthBackend(ModelBackend):
         print(phone_number, password, username)
         try:
             user: CustomUser = CustomUser.objects.get(
-                Q(phone_number=username) | Q(phone_number=phone_number)
+                Q(username=username) | Q(email=username) | Q(phone_number=username)
             )
             print(user.check_password(password))
 
