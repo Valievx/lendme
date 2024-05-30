@@ -22,12 +22,12 @@ class AuthBackend(ModelBackend):
         except CustomUser.DoesNotExist:
             return None
 
-    def authenticate(self, request, phone_number, password) -> CustomUser | None:
+    def authenticate(self, request, password, phone_number=None, username=None) -> CustomUser | None:
         print(request)
-        print(phone_number, password)
+        print(phone_number, password, username)
         try:
             user: CustomUser = CustomUser.objects.get(
-                Q(email=phone_number) | Q(phone_number=phone_number)
+                Q(phone_number=username) | Q(phone_number=phone_number)
             )
             print(user.check_password(password))
 
@@ -45,14 +45,4 @@ class AuthBackend(ModelBackend):
             return user
 
         else:
-            return None
-
-
-class AdminAuthBackend(ModelBackend):
-    def authenticate(self, request, username=None, password=None, **kwargs):
-        try:
-            user = CustomUser.objects.get(phone_number=username)
-            if user.check_password(password) and user.is_staff:
-                return user
-        except CustomUser.DoesNotExist:
             return None

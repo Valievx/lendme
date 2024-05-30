@@ -64,7 +64,7 @@ class LoginView(APIView):
     Требуемые данные: phone_number или email и password.
     """
 
-    renderer_classes = (JSONRenderer,)
+    # renderer_classes = (JSONRenderer,)
     permission_classes = (AllowAny,)
     serializer_class = CustomTokenObtainPairSerializer
 
@@ -142,7 +142,7 @@ class RegisterView(CreateAPIView):
     Требуемые данные: name, email, password, phone_number.
     """
 
-    renderer_classes = (JSONRenderer,)
+    # renderer_classes = (JSONRenderer,)
     permission_classes = (AllowAny,)
     serializer_class = UserSerializer
 
