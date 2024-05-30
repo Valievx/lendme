@@ -13,7 +13,13 @@ class CustomUser(AbstractUser):
     """Модель Пользователя."""
     # Когда перейдем на PostgreSQL установить id
     # id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
-    username = None
+    username = models.CharField(
+        "Юзернейм",
+        unique=True,
+        max_length=50,
+        blank=False,
+        null=False,
+    )
     name = models.CharField(
         "Имя пользователя",
         unique=False,
@@ -66,8 +72,8 @@ class CustomUser(AbstractUser):
 
     objects = CustomUserManager()
 
-    USERNAME_FIELD = "phone_number"
-    REQUIRED_FIELDS = []
+    USERNAME_FIELD = "username"
+    REQUIRED_FIELDS = ['name', 'email']
 
     class Meta:
         verbose_name = "Пользователь"

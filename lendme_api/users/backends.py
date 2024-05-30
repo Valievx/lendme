@@ -3,6 +3,10 @@ from django.db.models import Q
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 from .models import CustomUser
 
 
@@ -18,12 +22,12 @@ class AuthBackend(ModelBackend):
         except CustomUser.DoesNotExist:
             return None
 
-    def authenticate(self, request, phone_number, password) -> CustomUser | None:
+    def authenticate(self, request, password, phone_number=None, username=None) -> CustomUser | None:
         print(request)
-        print(phone_number, password)
+        print(phone_number, password, username)
         try:
             user: CustomUser = CustomUser.objects.get(
-                Q(email=phone_number) | Q(phone_number=phone_number)
+                Q(username=username) | Q(email=username) | Q(phone_number=username)
             )
             print(user.check_password(password))
 
@@ -31,7 +35,7 @@ class AuthBackend(ModelBackend):
             return None
 
         if user.email == phone_number and not user.is_email_verified:
-            raise ValidationError(_("Емаил не подтвержден."))
+            raise ValidationError(_("Email не подтвержден."))
 
         if user.phone_number == phone_number and not user.is_phone_verified:
             raise ValidationError(_("Телефон не подтвержден."))

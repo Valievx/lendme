@@ -16,6 +16,7 @@ class CustomUserManager(BaseUserManager):
         phone_number: int,
         email: str,
         password: str,
+        username=None,
         **extra_fields,
     ):
         extra_fields.setdefault("is_superuser", False)
@@ -24,29 +25,31 @@ class CustomUserManager(BaseUserManager):
         """
         Создает и сохраняет пользователя с заданными данными.
         """
+        if username is None:
+            username = phone_number
+
         user = self.model(
             name=name,
-            phone_number=phone_number,
+            phone_number=username,
+            username=username,
             email=email,
             password=password,
         )
         user.set_password(password)
-        # user.is_active = True
         user.save(using=self._db)
         return user
 
     def create_superuser(
         self,
         name: str,
-        phone_number: int,
         email: str,
         password: str,
+        username = None,
         **extra_fields,
     ):
 
         extra_fields.setdefault("is_superuser", True)
         extra_fields.setdefault("is_staff", True)
-        extra_fields.setdefault("is_active", True)
 
         if extra_fields.get("is_superuser") is not True:
             raise ValueError(
@@ -55,18 +58,16 @@ class CustomUserManager(BaseUserManager):
         """
         Создает и сохраняет супер-пользователя с заданными данными.
         """
+
         user = self.create_user(
             name=name,
-            phone_number=phone_number,
+            phone_number=username,
             email=email,
             password=password,
             **extra_fields,
         )
         user.is_phone_verified = True
-        user.is_verified = True
-        user.is_admin = True
         user.is_staff = True
         user.is_superuser = True
-        user.is_active = True
         user.save(using=self._db)
         return user
