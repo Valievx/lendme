@@ -12,7 +12,7 @@ SECRET_KEY = "django-insecure-e!iyl(-@i+7))xyy5p72m=y@ezs%ntm8e%x)bsc@#d4t(&41dd
 
 DEBUG = True
 
-ALLOWED_HOSTS = ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost").split(' ')
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost").split(' ')
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -187,7 +187,7 @@ AUTHENTICATION_BACKENDS = (
     "social_core.backends.vk.VKOAuth2",
     "social_core.backends.github.GithubOAuth2",
     "users.backends.AuthBackend",
-    "users.backends.AdminAuthBackend",
+    # "users.backends.AdminAuthBackend",
 )
 
 SOCIAL_AUTH_PIPELINE = (
