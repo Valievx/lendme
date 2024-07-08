@@ -21,14 +21,14 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/user/", include("users.urls")),
     path("api/", include(router.urls)),
-    path("schema/", SpectacularAPIView.as_view(), name="schema"),
+    path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path(
-         "swagger/",
+         "api/swagger/",
          SpectacularSwaggerView.as_view(url_name="schema"),
          name="swagger",
      ),
     path(
-         "redoc/",
+         "api/redoc/",
          SpectacularRedocView.as_view(url_name="schema"),
          name="redoc",
      ),

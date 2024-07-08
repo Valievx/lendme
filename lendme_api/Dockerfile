@@ -1,4 +1,4 @@
-FROM python:3.11
+FROM python:3.10.5-slim-buster
 WORKDIR /app
 RUN pip install gunicorn==20.1.0
 COPY requirements.txt .

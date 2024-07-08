@@ -9,22 +9,18 @@ services:
 
   db:
     image: postgres:13
-    env_file: ./lendme_api/.env
+    env_file: .env
     volumes:
       - pg_data:/var/lib/postgresql/data
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+
 
   backend:
     build: ./lendme_api/
-    env_file: ./lendme_api/.env
+    env_file: .env
     depends_on:
       - db
     volumes:
-      - static:/collected_static
+      - static:/app/collected_static
 
   frontend:
     build: ./frontend/
@@ -40,7 +36,7 @@ services:
     ports:
       - '8000:80'
     volumes:
-      - static:/static
+      - static:/var/html/static
       - frontend:/usr/share/nginx/html
 
 
