@@ -1,4 +1,4 @@
-# lendme_django
+# lendme
 
 Backend: Python, Django
 Frontend: React для создания интерфейса пользователя
