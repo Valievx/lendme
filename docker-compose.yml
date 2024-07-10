@@ -15,7 +15,7 @@ services:
 
 
   backend:
-    build: ./lendme_api/
+    build: ./lendme/
     env_file: .env
     depends_on:
       - db
@@ -28,7 +28,7 @@ services:
       - frontend:/app/dist
 
   nginx:
-    build: ./infra/
+    build: ./nginx/
     depends_on:
       - db
       - backend
