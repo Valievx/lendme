@@ -15,7 +15,7 @@ services:
 
 
   backend:
-    build: ./lendme/
+    image: theosmi808/lendme_backend
     env_file: .env
     depends_on:
       - db
@@ -23,12 +23,12 @@ services:
       - static:/app/collected_static
 
   frontend:
-    build: ./frontend/
+    image: theosmi808/lendme_frontend
     volumes:
       - frontend:/app/dist
 
   nginx:
-    build: ./nginx/
+    image: theosmi808/lendme_nginx
     depends_on:
       - db
       - backend
