@@ -1,0 +1,71 @@
+version: '3'
+
+volumes:
+  pg_data:
+  static:
+  frontend:
+
+services:
+
+  db:
+    image: postgres:13
+    env_file: .env
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+
+
+  backend:
+    build: ./lendme_api/
+    env_file: .env
+    depends_on:
+      - db
+    volumes:
+      - static:/app/collected_static
+
+  frontend:
+    build: ./frontend/
+    volumes:
+      - frontend:/app/dist
+
+  nginx:
+    build: ./infra/
+    depends_on:
+      - db
+      - backend
+      - frontend
+    ports:
+      - '8000:80'
+    volumes:
+      - static:/var/html/static
+      - frontend:/usr/share/nginx/html
+
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+#  celery:
+#    build:
+#      context: .
+#    command: celery -A charity worker --loglevel=info
+#    volumes:
+#      - .:/app
+#    environment:
+#      - DJANGO_SETTINGS_MODULE=charity.settings
+#      - SECRET_KEY=your_secret_key
+#    depends_on:
+#      db:
+#        condition: service_healthy
+#      redis:
+#        condition: service_healthy
+#    healthcheck:
+#      test: ["CMD", "curl", "--fail", "http://celery:8000/healthz"]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 5
