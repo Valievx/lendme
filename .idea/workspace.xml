@@ -6,8 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="cde01e00-590a-426f-aec2-fab2c646f2a9" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lendme/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/lendme/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nginx/requirements.txt" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
